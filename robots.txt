@@ -1,0 +1,23 @@
+# Wheatburn — https://wheatburn.rw
+#
+# One file governs the whole domain, because the marketing site and the shop
+# share it. This file is byte-identical in wheatburn-site/ and in
+# wheatburn-shop/public/ so that whichever server answers the domain root
+# serves the same rules.
+
+User-agent: *
+Allow: /
+
+# Customer-only and transactional pages: no search value, and nothing here
+# should be reachable from a search result.
+Disallow: /account
+Disallow: /order
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+
+# The JSON API and the staff endpoint behind it.
+Disallow: /api/
+
+Sitemap: https://wheatburn.rw/sitemap.xml
