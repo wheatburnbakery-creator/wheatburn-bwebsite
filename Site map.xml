@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Wheatburn — the whole domain on one sitemap, because the marketing site and
+  the shop share https://wheatburn.rw. This file is byte-identical in
+  wheatburn-site/ and in wheatburn-shop/public/.
+
+  Two deliberate choices:
+
+  1. The marketing pages are listed with their .html extension. That project is
+     plain static files with no rewrites configured, so /story.html is the URL
+     that is certain to resolve. The shop is listed with clean URLs because its
+     own server maps /menu to menu.html (see src/http.js).
+
+  2. The shop's own home page is NOT listed. On a shared domain it would sit at
+     "/", which the marketing home page already occupies, so it has no distinct
+     URL yet. See the note in README.md before the site goes live.
+
+  Only pages worth indexing appear here. /account, /order, /login, /register and
+  the password pages are excluded and are blocked in robots.txt.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://wheatburn.rw/</loc>
+    <lastmod>2026-09-16</lastmod>
+  </url>
+
+  <url>
+    <loc>https://wheatburn.rw/story.html</loc>
+    <lastmod>2026-09-16</lastmod>
+  </url>
+
+  <url>
+    <loc>https://wheatburn.rw/products.html</loc>
+    <lastmod>2026-09-16</lastmod>
+  </url>
+
+  <url>
+    <loc>https://wheatburn.rw/wholesale.html</loc>
+    <lastmod>2026-09-16</lastmod>
+  </url>
+
+  <url>
+    <loc>https://wheatburn.rw/contact.html</loc>
+    <lastmod>2026-09-16</lastmod>
+  </url>
+
+  <url>
+    <loc>https://wheatburn.rw/menu</loc>
+    <lastmod>2026-09-16</lastmod>
+  </url>
+
+</urlset>
