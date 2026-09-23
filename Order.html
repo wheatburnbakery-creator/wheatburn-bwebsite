@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Order — Wheatburn Bakery, Kigali</title>
+<meta name="description" content="Order from Wheatburn Bakery in Kigali. Cash on delivery, MTN MoMo, Airtel Money or bank transfer. Delivered across Kigali or collected at the counter on KG 11 Ave. No account needed.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23b4521e'/><text x='16' y='23' font-family='Georgia,serif' font-size='19' fill='%23fdfaf5' text-anchor='middle'>W</text></svg>">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#b4521e">
+<link rel="stylesheet" href="/assets/css/shop.css">
+</head>
+<body data-page="order">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="site-header"></header>
+
+<main id="main">
+
+  <!-- ===================== checkout ===================== -->
+  <section class="section sm" id="checkout-view">
+    <div class="wrap">
+      <p class="eyebrow">Checkout</p>
+      <h1>Four short steps.</h1>
+
+      <ol class="steps" id="steps">
+        <li id="step-basket" class="active"><span class="dot">1</span> Basket</li>
+        <li id="step-details"><span class="dot">2</span> Details</li>
+        <li id="step-delivery"><span class="dot">3</span> Delivery</li>
+        <li id="step-payment"><span class="dot">4</span> Payment</li>
+        <li id="step-done"><span class="dot">✓</span> Confirmed</li>
+      </ol>
+
+      <p class="form-note" id="checkout-note" hidden></p>
+
+      <div class="checkout-grid">
+
+        <!-- ------------------------- left column ------------------------- -->
+        <div>
+
+          <div class="panel">
+            <h2>Your basket</h2>
+            <div id="basket-lines"></div>
+            <div id="basket-empty" class="empty-state" hidden>
+              <div class="big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9.6c0-2.3 3.1-4.1 7-4.1s7 1.8 7 4.1v6.2c0 1.7-3.1 3-7 3s-7-1.3-7-3V9.6Z"/><path d="M9 8.3 10.6 12.1"/><path d="M12.5 7.7 14.1 11.5"/></svg></div>
+              <p>Your basket is empty.</p>
+              <a class="btn btn-primary" href="/menu">Choose from the menu</a>
+            </div>
+          </div>
+
+          <div class="panel" id="details-panel" hidden>
+            <h2>Who is it for?</h2>
+            <p class="small" id="account-hint"></p>
+            <div class="form">
+              <div class="field">
+                <label for="f-name">Name</label>
+                <input class="input" id="f-name" name="name" autocomplete="name" required>
+                <span class="field-error"></span>
+              </div>
+              <div class="field">
+                <label for="f-phone">Phone number</label>
+                <input class="input" id="f-phone" name="phone" type="tel" inputmode="tel"
+                       autocomplete="tel" placeholder="0788 123 456" required>
+                <span class="help">We send the order confirmation to this number by SMS.</span>
+                <span class="field-error"></span>
+              </div>
+              <label class="checkbox">
+                <input type="checkbox" id="f-whatsapp" checked>
+                <span>Send me the confirmation on WhatsApp too, if this number has it.</span>
+              </label>
+              <div class="field">
+                <label for="f-notes">Anything we should know? (optional)</label>
+                <textarea class="textarea" id="f-notes" placeholder="Gate code, landmark, “leave with the security guard”, allergies…"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" id="delivery-panel" hidden>
+            <h2>Where should it go?</h2>
+            <div class="choice-list" id="zone-choices"></div>
+
+            <div id="address-fields" class="form mt-2" hidden>
+              <div class="field">
+                <label for="f-address">Delivery address</label>
+                <textarea class="textarea" id="f-address" autocomplete="street-address"
+                  placeholder="Street, house number or the building name"></textarea>
+                <span class="help">A landmark helps more than a street name in Kigali — “behind the Kicukiro market”, for example.</span>
+                <span class="field-error"></span>
+              </div>
+              <div class="field">
+                <label for="f-landmark">Nearest landmark (optional)</label>
+                <input class="input" id="f-landmark" placeholder="e.g. opposite the Kicukiro taxi park">
+              </div>
+            </div>
+
+            <p class="form-note mt-2" id="dispatch-note" hidden></p>
+          </div>
+
+          <div class="panel" id="payment-panel" hidden>
+            <h2>How will you pay?</h2>
+            <div class="choice-list" id="payment-choices"></div>
+            <div class="form mt-2" id="reference-fields" hidden>
+              <div class="field">
+                <label for="f-reference" id="reference-label">Payment reference</label>
+                <input class="input" id="f-reference" placeholder="e.g. 1234567890">
+                <span class="help">Leave this blank if you have not paid yet — we will send you our payment details and you can reply with the reference.</span>
+              </div>
+            </div>
+            <p class="form-note mt-2" id="payment-note" hidden></p>
+          </div>
+
+        </div>
+
+        <!-- ------------------------- summary ------------------------- -->
+        <aside class="sidebar">
+          <div class="panel" id="summary-panel">
+            <h2>Order summary</h2>
+            <div id="summary-rows"></div>
+            <div id="summary-foot"></div>
+          </div>
+
+          <div class="panel">
+            <h2>Prefer to talk?</h2>
+            <p class="small">Send the basket to us on WhatsApp and we will confirm it by hand, or call the
+            counter during opening hours.</p>
+            <a class="btn btn-ghost btn-block" id="wa-basket" href="#" target="_blank" rel="noopener">Send basket on WhatsApp</a>
+            <a class="btn btn-ghost btn-block mt-1" id="call-counter" href="#">Call the counter</a>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== confirmation ===================== -->
+  <section class="section sm" id="confirmation-view" hidden>
+    <div class="wrap">
+      <div class="confirm-hero">
+        <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.1 12.4 2.7 2.7L16 9.7"/></svg></div>
+        <h1>Order received</h1>
+        <p id="confirm-message">Thank you — we are on it.</p>
+        <div class="order-number" id="confirm-number"></div>
+        <p class="small mt-2" id="confirm-sms"></p>
+        <div class="btn-row" id="confirm-actions"></div>
+      </div>
+
+      <div class="checkout-grid mt-3">
+        <div>
+          <div class="panel">
+            <h2>What happens next</h2>
+            <ul class="timeline" id="confirm-timeline"></ul>
+          </div>
+          <div class="panel">
+            <h2>Your order</h2>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th scope="col">Item</th><th scope="col" class="num">Qty</th><th scope="col" class="num">Line total</th></tr>
+                </thead>
+                <tbody id="confirm-lines"></tbody>
+              </table>
+            </div>
+            <p class="small mt-2" id="confirm-total"></p>
+          </div>
+        </div>
+        <aside class="sidebar">
+          <div class="panel">
+            <h2>Delivery</h2>
+            <div id="confirm-delivery"></div>
+          </div>
+          <div class="panel">
+            <h2>Payment</h2>
+            <div id="confirm-payment"></div>
+          </div>
+          <div class="panel" id="confirm-account-panel" hidden>
+            <h2>Keep this for next time</h2>
+            <p class="small">You ordered as a guest. Create an account with the same number and this order,
+            your address and your favourite items come with you.</p>
+            <div class="btn-row" id="confirm-account-actions"></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== track an order ===================== -->
+  <section class="section sm" id="track-view" hidden>
+    <div class="wrap tight">
+      <p class="eyebrow">Track an order</p>
+      <h1 class="h-sm">Where is my order?</h1>
+      <p class="lede">Enter the order number from your confirmation message and the phone number you
+      ordered with.</p>
+
+      <div class="auth-card mt-2">
+        <div class="form-note error" id="track-error" hidden></div>
+        <form class="form" id="track-form" novalidate>
+          <div class="field">
+            <label for="t-number">Order number</label>
+            <input class="input" id="t-number" placeholder="WB-260914-0001" autocomplete="off" required>
+            <span class="field-error"></span>
+          </div>
+          <div class="field">
+            <label for="t-phone">Phone number on the order</label>
+            <input class="input" id="t-phone" type="tel" inputmode="tel" placeholder="0788 123 456" required>
+            <span class="field-error"></span>
+          </div>
+          <button class="btn btn-primary btn-block" type="submit" id="track-submit">Find my order</button>
+        </form>
+      </div>
+
+      <div class="panel mt-3" id="track-result" hidden>
+        <h2 id="track-result-title">Your order</h2>
+        <div id="track-result-body"></div>
+      </div>
+
+      <p class="small mt-2"><a href="/order">Back to basket and checkout</a></p>
+    </div>
+  </section>
+
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/ui.js"></script>
+<script src="/assets/js/order.js"></script>
+</body>
+  </html>
