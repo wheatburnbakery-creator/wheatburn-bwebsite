@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact &amp; visit — Wheatburn Bakery, Kigali</title>
+<meta name="description" content="Talk to Wheatburn Bakery in Kigali: WhatsApp, phone, email and the counter on KG 11 Ave, Kicukiro. Opening hours Monday to Saturday, 07:00–18:00. Wholesale enquiries welcome.">
+<meta property="og:title" content="Contact &amp; visit — Wheatburn Bakery">
+<meta property="og:description" content="WhatsApp, phone, email, or walk into the counter on KG 11 Ave, Kicukiro.">
+<meta property="og:image" content="/assets/img/dawn-delivery.jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23b4521e'/><text x='16' y='23' font-family='Georgia,serif' font-size='19' fill='%23fdfaf5' text-anchor='middle'>W</text></svg>">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#b4521e">
+<link rel="stylesheet" href="/assets/css/shop.css">
+</head>
+<body data-page="contact">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<noscript>
+  <div class="wrap section sm">
+    <p class="form-note warn">The message form needs JavaScript. You can still call or WhatsApp us using
+    the numbers on this page.</p>
+  </div>
+</noscript>
+
+<main id="main">
+
+  <section class="section sm">
+    <div class="wrap">
+      <p class="eyebrow">Contact us</p>
+      <h1>Four ways to reach us.</h1>
+      <p class="lede">WhatsApp is fastest — someone at the counter answers it during opening hours.
+      For a standing order or a bulk quote, use the form and we will reply with a written price.</p>
+    </div>
+  </section>
+
+  <section class="section sm">
+    <div class="wrap">
+      <div class="grid grid-4">
+
+        <div class="card">
+          <span class="num">01 · WhatsApp</span>
+          <h3>Chat now</h3>
+          <p class="small">The quickest route for order changes, delivery questions and the wholesale price book.</p>
+          <a class="btn btn-primary btn-sm btn-block" id="wa-contact" href="#" target="_blank" rel="noopener">Open WhatsApp</a>
+        </div>
+
+        <div class="card">
+          <span class="num">02 · Phone</span>
+          <h3 id="phone-display">Call us</h3>
+          <p class="small">Ring the counter during opening hours. If we are mid-bake, leave a missed call and we ring back.</p>
+          <a class="btn btn-ghost btn-sm btn-block" id="phone-link" href="#">Call the counter</a>
+        </div>
+
+        <div class="card">
+          <span class="num">03 · Email</span>
+          <h3 id="email-display">Write to us</h3>
+          <p class="small">Best for invoices, purchase orders and anything you need in writing.</p>
+          <a class="btn btn-ghost btn-sm btn-block" id="email-link" href="#">Send an email</a>
+        </div>
+
+        <div class="card">
+          <span class="num">04 · Visit</span>
+          <h3>The counter</h3>
+          <p class="small" id="address-display">Our address</p>
+          <p class="small" id="hours-display"></p>
+          <a class="btn btn-ghost btn-sm btn-block" id="map-link" href="#" target="_blank" rel="noopener">Open in maps</a>
+        </div>
+
+      </div>
+
+      <div class="note mt-3">
+        <h4>Opening hours</h4>
+        <p class="mb-0" id="hours-note"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cream">
+    <div class="wrap section">
+      <div class="split">
+        <div>
+          <p class="eyebrow">Send a message</p>
+          <h2>Tell us what you need and we will reply.</h2>
+          <p>Use this for wholesale enquiries, standing orders, celebration cakes (48 hours' notice),
+          allergen questions or anything about an order you already placed.</p>
+          <p class="small">We reply during counter hours, Monday to Saturday. For anything urgent, WhatsApp
+          is faster.</p>
+        </div>
+
+        <div class="auth-card">
+          <div class="form-note error" id="contact-error" hidden></div>
+          <div class="form-note ok" id="contact-success" hidden></div>
+          <form class="form" id="contact-form" novalidate>
+            <div class="field">
+              <label for="c-name">Your name</label>
+              <input class="input" id="c-name" name="name" autocomplete="name" required>
+              <span class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="c-phone">Phone number</label>
+              <input class="input" id="c-phone" name="phone" type="tel" inputmode="tel" placeholder="0788 123 456">
+              <span class="help">Optional, but it is how we usually reply.</span>
+              <span class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="c-email">Email (optional)</label>
+              <input class="input" id="c-email" name="email" type="email" autocomplete="email">
+              <span class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="c-topic">What is it about?</label>
+              <select id="c-topic" name="topic">
+                <option value="general">A general question</option>
+                <option value="order">An order I placed</option>
+                <option value="wholesale">Wholesale or a standing order</option>
+                <option value="celebration">A celebration cake</option>
+                <option value="allergy">Allergens or ingredients</option>
+                <option value="delivery">Delivery to my area</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="c-message">Your message</label>
+              <textarea class="textarea" id="c-message" name="message" required
+                placeholder="For a wholesale quote, tell us roughly how many of each item per day and where you are."></textarea>
+              <span class="field-error"></span>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit" id="contact-submit">Send message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <figure class="media">
+        <img src="/assets/img/dawn-delivery.jpg" alt="Stacked wooden crates of paper-wrapped loaves on a timber bench on a quiet Kigali street before dawn">
+        <figcaption>Wholesale leaves before 06:30 — on the counter before your doors open.</figcaption>
+      </figure>
+      <div>
+        <p class="eyebrow">About us</p>
+        <h2>A Rwandan bakery that bakes the local harvest.</h2>
+        <p>Wheatburn bakes on cassava, sorghum, millet, honey, groundnut and Rwandan fruit — and names
+        every product in Kinyarwanda first, with a short English gloss for visitors.</p>
+        <p class="mb-0">We are working towards Made in Rwanda registration, HACCP discipline and the
+        RBS S-Mark. None of those is claimed as held today.</p>
+        <div class="btn-row">
+          <a class="btn btn-ghost" href="/menu">See the range</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/ui.js"></script>
+<script src="/assets/js/contact.js"></script>
+</body>
+  </html>
+  
