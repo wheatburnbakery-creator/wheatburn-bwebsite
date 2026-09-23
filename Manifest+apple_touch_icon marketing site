@@ -1,0 +1,19 @@
+{
+  "name": "Wheatburn Bakery",
+  "short_name": "Wheatburn",
+  "description": "A local-first terroir bakery in Kigali — cassava, sorghum, millet, honey, groundnut and local fruit, named in Kinyarwanda.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fbf8f3",
+  "theme_color": "#b4521e",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["food", "business"],
+  "icons": [
+    {
+      "src": "assets/img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+     
