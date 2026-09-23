@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in — Wheatburn Bakery</title>
+<meta name="description" content="Sign in to Wheatburn Bakery with your phone number and password, or with a one-time SMS code.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23b4521e'/><text x='16' y='23' font-family='Georgia,serif' font-size='19' fill='%23fdfaf5' text-anchor='middle'>W</text></svg>">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#b4521e">
+<link rel="stylesheet" href="/assets/css/shop.css">
+</head>
+<body data-page="login">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="site-header"></header>
+
+<main id="main">
+  <section class="section sm">
+    <div class="wrap tight">
+      <p class="eyebrow">Your account</p>
+      <h1 class="h-sm">Sign in to Wheatburn.</h1>
+      <p class="lede mb-0">Signing in keeps your order history, address and favourite items in one place.
+      You never need an account to order.</p>
+
+      <div class="auth-card mt-2">
+
+        <div class="tabs" role="tablist" aria-label="How to sign in">
+          <button type="button" role="tab" id="tab-password" aria-selected="true" aria-controls="panel-password">Phone + password</button>
+          <button type="button" role="tab" id="tab-otp" aria-selected="false" aria-controls="panel-otp">Phone + SMS code</button>
+        </div>
+
+        <div class="form-note error" id="login-error" hidden></div>
+
+        <!-- ---------------------- password ---------------------- -->
+        <div id="panel-password" role="tabpanel" aria-labelledby="tab-password">
+          <form class="form" id="password-form" novalidate>
+            <div class="field">
+              <label for="p-phone">Phone number</label>
+              <input class="input" id="p-phone" type="tel" inputmode="tel" autocomplete="tel"
+                     placeholder="0788 123 456" required>
+              <span class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="p-password">Password</label>
+              <input class="input" id="p-password" type="password" autocomplete="current-password" required>
+              <span class="field-error"></span>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit" id="password-submit">Sign in</button>
+            <p class="small mb-0"><a href="/forgot-password">Forgot your password?</a></p>
+          </form>
+        </div>
+
+        <!-- ---------------------- one-time code ---------------------- -->
+        <div id="panel-otp" role="tabpanel" aria-labelledby="tab-otp" hidden>
+          <form class="form" id="otp-form" novalidate>
+            <div class="field">
+              <label for="o-phone">Phone number</label>
+              <input class="input" id="o-phone" type="tel" inputmode="tel" autocomplete="tel"
+                     placeholder="0788 123 456" required>
+              <span class="help">We text you a six-digit code. It lasts five minutes.</span>
+              <span class="field-error"></span>
+            </div>
+
+            <div id="otp-step-code" hidden>
+              <div class="field">
+                <label for="o-code">Six-digit code</label>
+                <input class="input otp-input" id="o-code" inputmode="numeric" autocomplete="one-time-code"
+                       maxlength="6" placeholder="••••••">
+                <span class="field-error"></span>
+              </div>
+              <div class="form-note" id="otp-hint" hidden></div>
+            </div>
+
+            <button class="btn btn-primary btn-block" type="submit" id="otp-submit">Send me a code</button>
+            <button class="btn btn-ghost btn-block" type="button" id="otp-resend" hidden>Send a new code</button>
+          </form>
+        </div>
+
+        <p class="small mt-2 mb-0">New here? <a href="/register">Create an account</a> — it takes twenty seconds.</p>
+      </div>
+
+      <p class="small mt-2"><a href="/order">Continue as a guest instead</a></p>
+    </div>
+  </section>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/ui.js"></script>
+<script src="/assets/js/auth.js"></script>
+</body>
+  </html>
+  
