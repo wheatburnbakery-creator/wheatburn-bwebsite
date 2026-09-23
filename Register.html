@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create an account — Wheatburn Bakery</title>
+<meta name="description" content="Create a Wheatburn account with your name, phone number and a password. Save your delivery address, see your order history and reorder in one tap.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23b4521e'/><text x='16' y='23' font-family='Georgia,serif' font-size='19' fill='%23fdfaf5' text-anchor='middle'>W</text></svg>">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#b4521e">
+<link rel="stylesheet" href="/assets/css/shop.css">
+</head>
+<body data-page="register">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="site-header"></header>
+
+<main id="main">
+  <section class="section sm">
+    <div class="wrap tight">
+      <p class="eyebrow">Create an account</p>
+      <h1 class="h-sm">Name, number, password. That is it.</h1>
+      <p class="lede mb-0">An account saves your delivery address and phone number, keeps your order
+      history, and lets you reorder in one tap. You can still order as a guest any time.</p>
+
+      <div class="auth-card mt-2">
+        <div class="form-note error" id="register-error" hidden></div>
+
+        <form class="form" id="register-form" novalidate>
+          <div class="field">
+            <label for="r-name">Your name</label>
+            <input class="input" id="r-name" name="name" autocomplete="name" placeholder="Aline Uwase" required>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field">
+            <label for="r-phone">Phone number</label>
+            <input class="input" id="r-phone" name="phone" type="tel" inputmode="tel"
+                   autocomplete="tel" placeholder="0788 123 456" required>
+            <span class="help">You sign in with this number, and we send order confirmations to it.</span>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field">
+            <label for="r-password">Password</label>
+            <input class="input" id="r-password" name="password" type="password"
+                   autocomplete="new-password" required>
+            <span class="help" id="password-help">At least 8 characters, with one letter and one number.</span>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field">
+            <label for="r-password2">Password again</label>
+            <input class="input" id="r-password2" name="password2" type="password"
+                   autocomplete="new-password" required>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field" id="address-field">
+            <label for="r-address">Delivery address (optional)</label>
+            <input class="input" id="r-address" name="address" autocomplete="street-address"
+                   placeholder="Street, house number or building name">
+            <span class="help">Save it now and checkout is one step shorter next time.</span>
+          </div>
+
+          <label class="checkbox">
+            <input type="checkbox" id="r-whatsapp" checked>
+            <span>Send my order confirmation on WhatsApp as well as SMS.</span>
+          </label>
+
+          <label class="checkbox">
+            <input type="checkbox" id="r-terms" checked>
+            <span>I agree that Wheatburn may store my name, phone number and address to fulfil my orders.</span>
+          </label>
+
+          <button class="btn btn-primary btn-block" type="submit" id="register-submit">Create my account</button>
+        </form>
+
+        <p class="small mt-2 mb-0">Already have an account? <a href="/login">Sign in</a>.</p>
+      </div>
+
+      <p class="small mt-2">We store only what we need to bake and deliver your order: your name, phone
+      number, an address if you save one, and your order history. Your password is stored as a hash, never
+      as text.</p>
+    </div>
+  </section>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/ui.js"></script>
+<script src="/assets/js/auth.js"></script>
+</body>
+</html>
