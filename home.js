@@ -19,7 +19,7 @@ WB.onReady(async () => {
     // Takes the first six featured products in menu order. `featured` in
     // data/products.json is a pool, so the seventh is available to the menu
     // page and to future promotion slots without a code change.
-    const featured = products.filter((p) => p.featured).slice(0, 6);
+    const featured = products.filter((/** @type {{featured?: boolean}} */p) => p.featured).slice(0, 6);
     grid.replaceChildren(...featured.map(WB.ui.productCard));
     grid.removeAttribute('aria-busy');
   } catch (err) {
@@ -31,7 +31,12 @@ WB.onReady(async () => {
   try {
     const info = await WB.api.get('/delivery');
     const rows = WB.qs('#delivery-rows');
-
+/**
+ * @param {string} name
+ * @param {string} eta
+ * @param {string} fee
+ * @param {string} note
+ */
     const row = (name, eta, fee, note) =>
       el('tr', null, [
         el('td', null, [
@@ -42,7 +47,7 @@ WB.onReady(async () => {
         el('td', { class: 'num', text: fee })
       ]);
 
-    const tableRows = info.zones.map((zone) => row(zone.name, zone.etaText, zone.feeLabel, zone.note));
+    const tableRows = info.zones.map((/** @param {{id: string|number, name: string, feeLabel: string, etaText: string}} zone */) => row(zone.name, zone.etaText, zone.feeLabel, zone.note));
     tableRows.push(
       row(
         info.pickup.name,
@@ -72,7 +77,7 @@ WB.onReady(async () => {
   try {
     const info = await WB.api.get('/payments');
     WB.qs('#payment-grid').replaceChildren(
-      ...info.methods.map((method) =>
+      ...info.methods.map((/** @param {{id: string|number, label: string, detail?: string}} method */) =>
         el('div', { class: 'card' }, [
           el('h3', { text: method.short }),
           el('p', { class: 'mb-0', text: method.detail }),
