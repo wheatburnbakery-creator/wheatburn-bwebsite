@@ -4,7 +4,20 @@
  *
  * Route table at the bottom. `:name` segments become `params.name`.
  */
+/**
+ * @typedef {Object} Req
+ * @property {string} url
+ * @property {string} method
+ * @property {Object} headers
+ * @property {any} [body]
+ */
 
+/**
+ * @typedef {Object} Res
+ * @property {(code: number) => Res} writeHead
+ * @property {(chunk?: any) => void} end
+ * @property {(data: any) => void} [json]
+ */
 const crypto = require('node:crypto');
 const config = require('./config');
 const store = require('./store');
@@ -17,13 +30,13 @@ const notify = require('./notify');
 const httpUtil = require('./http');
 const { HttpError, json } = httpUtil;
 
-function baseUrl(req) {
+function baseUrl(/** @type {Req} */req) {
   const proto = req.headers['x-forwarded-proto'] || (config.isProduction ? 'https' : 'http');
   const host = req.headers.host || `localhost:${config.PORT}`;
   return `${proto}://${host}`;
 }
 
-function requireStaff(req) {
+function requireStaff(/** @type {Req} */req) {
   const token = req.headers['x-staff-token'] || '';
   if (!config.order.staffToken || token !== config.order.staffToken) {
     throw new HttpError(401, 'Staff token required.', 'staff_token_invalid');
@@ -43,7 +56,13 @@ const storefront = () => ({
   priceNote: catalog.priceNote
 });
 
-function listProducts(req, res, url, params, input) {
+function listProducts( 
+/** @type {Req} */_req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ url,
+   /** @type {Record<string, string>} */ _params,
+   /** @type {any} */ _input,
+                     ) {
   const channel = url.searchParams.get('channel') === 'wholesale' ? 'wholesale' : 'retail';
   return {
     channel,
@@ -57,7 +76,13 @@ function listProducts(req, res, url, params, input) {
   };
 }
 
-function getProduct(req, res, url, params, input) {
+function getProduct(
+  /** @type {Req} */ _req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ url,
+ /** @type {Record<string, string>} */ _params,
+   /** @type {any} */ _input 
+                   ) {
   const channel = url.searchParams.get('channel') === 'wholesale' ? 'wholesale' : 'retail';
   const product = catalog.getOrThrow(params.id);
   return { product: catalog.serialize(product, { channel }) };
@@ -74,7 +99,13 @@ const deliveryInfo = () => ({
 const paymentInfo = () => ({ methods: payments.list() });
 
 /** Live basket pricing — used by the order page on every change. */
-function quoteCart(req, res, url, params, input) {
+function quoteCart(
+  /** @type {Req} */ _req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ _input
+) {
   const channel = input.channel === 'wholesale' ? 'wholesale' : 'retail';
   const items = Array.isArray(input.items) ? input.items : [];
 
@@ -121,7 +152,13 @@ function quoteCart(req, res, url, params, input) {
 
 /* -------------------------------------------------------------------- account */
 
-async function register(req, res, url, params, input) {
+async function register(
+  /** @type {Req} */ _req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ input
+) {
   const user = auth.createUser({
     name: input.name,
     phone: input.phone,
@@ -134,7 +171,13 @@ async function register(req, res, url, params, input) {
   return { user: auth.publicUser(user), message: `Welcome to Wheatburn, ${user.name.split(' ')[0]}.` };
 }
 
-async function loginPassword(req, res, url, params, input) {
+async function loginPassword(
+  /** @type {Req} */ _req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ input
+) {
   const result = await auth.loginWithPassword({
     phone: input.phone,
     password: input.password,
@@ -145,7 +188,13 @@ async function loginPassword(req, res, url, params, input) {
   return { user: result.user, message: `Welcome back, ${result.user.name.split(' ')[0]}.` };
 }
 
-async function startOtp(req, res, url, params, input) {
+async function startOtp(
+  /** @type {Req} */ _req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ input
+) {
   const purpose = input.purpose === 'reset' ? 'reset' : 'login';
   const result = await auth.startOtp({
     phone: input.phone,
@@ -160,7 +209,13 @@ async function startOtp(req, res, url, params, input) {
   };
 }
 
-async function verifyOtpLogin(req, res, url, params, input) {
+async function verifyOtpLogin(
+  /** @type {Req} */ _req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ input
+) {
   const result = await auth.loginWithOtp({
     challengeId: input.challengeId,
     code: input.code,
@@ -171,19 +226,19 @@ async function verifyOtpLogin(req, res, url, params, input) {
   return { user: result.user, message: `Signed in as ${result.user.name.split(' ')[0]}.` };
 }
 
-async function session(req) {
+async function session(/** @type {Req} */req) {
   const found = auth.sessionFromRequest(req);
   if (!found) return { user: null };
   return { user: auth.publicUser(found.user) };
 }
 
-async function logout(req, res) {
+async function logout(/** @type {Req} */req, /** @type {Res} */res) {
   auth.endSession(req, res);
   return { ok: true, message: 'You are signed out on this device.' };
 }
 
 /** Full dashboard payload: profile, counters, orders, saved details. */
-async function dashboard(req, res) {
+async function dashboard(/** @type {Req} */req,/** @type {Res} */ res) {
   const { user } = auth.requireUser(req, res);
   const current = auth.sessionFromRequest(req);
   return {
@@ -196,13 +251,25 @@ async function dashboard(req, res) {
   };
 }
 
-async function patchAccount(req, res, url, params, input) {
+async function patchAccount(
+  /** @type {Req} */ req,
+  /** @type {Res} */ res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ input
+) {
   const { user } = auth.requireUser(req, res);
   return { user: auth.updateProfile(user, input), message: 'Your details are saved.' };
 }
 
-async function changePassword(req, res, url, params, input) {
-  const { user, session } = auth.requireUser(req, res);
+async function changePassword(
+  /** @type {Req} */ req,
+  /** @type {Res} */ res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ input
+) {
+  const { user, session: _session} = auth.requireUser(req, res);
   const cookies = httpUtil.parseCookies(req);
   const result = auth.changePassword(user, input.currentPassword, input.newPassword, {
     keepToken: cookies[config.security.sessionCookie]
@@ -216,7 +283,13 @@ async function changePassword(req, res, url, params, input) {
 
 /* --------------------------------------------------------------------- orders */
 
-async function createOrder(req, res, url, params, input) {
+async function createOrder(
+  /** @type {Req} */ req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ input
+) {
   const found = auth.sessionFromRequest(req);
   const order = await orders.createOrder({
     items: input.items,
@@ -233,13 +306,19 @@ async function createOrder(req, res, url, params, input) {
   };
 }
 
-async function myOrders(req, res) {
+async function myOrders(/** @type {Req} */req,/** @type {Res} */_res) {
   const { user } = auth.requireUser(req, res);
   return { orders: orders.listForUser(user.id) };
 }
 
 /** A signed-in owner, or a guest with the matching order number and phone. */
-async function getOrder(req, res, url, params) {
+async function getOrder(
+  /** @type {Req} */ req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ _input
+) {
   const found = auth.sessionFromRequest(req);
   const number = params.number;
 
@@ -255,31 +334,53 @@ async function getOrder(req, res, url, params) {
   return { order: orders.findByNumberAndPhone(number, phone) };
 }
 
-async function trackOrder(req, res, url, params, input) {
+async function trackOrder(
+  /** @type {Req} */ _req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ input
+) {
   return { order: orders.findByNumberAndPhone(input.number, input.phone) };
 }
 
-async function reorder(req, res, url, params) {
+async function reorder(
+  /** @type {Req} */ req,
+  /** @type {Res} */ res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ _input
+) {
   const { user } = auth.requireUser(req, res);
   return orders.reorderPayload(params.id, user);
 }
 
 /* ---------------------------------------------------------------------- staff */
 
-async function staffOrders(req, res, url) {
+async function staffOrders(
+  /** @type {Req} */ req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ url
+) {
   requireStaff(req);
   const status = url.searchParams.get('status');
   const list = store
     .data()
     .orders.slice()
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .filter((o) => !status || o.status === status)
+    .sort((/** @type {{createdAt: string}} */a,/** @type {{createdAt: string}} */ b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .filter((/** @type {{status: string}} */o) => !status || o.status === status)
     .slice(0, Number(url.searchParams.get('limit') || 40))
     .map(orders.serialize);
   return { orders: list, statuses: orders.STATUSES };
 }
 
-async function staffSetStatus(req, res, url, params, input) {
+async function staffSetStatus(
+  /** @type {Req} */ req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ input
+) {
   requireStaff(req);
   return {
     order: orders.advanceStatus({
@@ -294,7 +395,13 @@ async function staffSetStatus(req, res, url, params, input) {
 
 /* -------------------------------------------------------------------- contact */
 
-async function contact(req, res, url, params, input) {
+async function contact(
+  /** @type {Req} */ req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ input
+) {
   const name = String(input.name || '').trim();
   const message = String(input.message || '').trim();
   if (name.length < 2) throw new HttpError(400, 'Tell us your name.', 'name_required');
@@ -345,7 +452,13 @@ const ROUTES = [
   ['POST', 'auth/login', loginPassword],
   ['POST', 'auth/otp/start', startOtp],
   ['POST', 'auth/otp/verify', verifyOtpLogin],
-  ['POST', 'auth/reset/start', async (req, res, url, params, input) => ({
+  ['POST', 'auth/reset/start', async (
+    /** @type {Req} */ req,
+  /** @type {Res} */ res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ input
+  ) => ({
     ...(await auth.startPasswordReset({
       identifier: input.identifier,
       channel: input.channel === 'email' ? 'email' : 'sms',
@@ -354,7 +467,13 @@ const ROUTES = [
       res
     }))
   })],
-  ['POST', 'auth/reset/confirm', async (req, res, url, params, input) => ({
+  ['POST', 'auth/reset/confirm', async (
+    /** @type {Req} */ _req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ _url,
+  /** @type {Record<string, string>} */ _params,
+  /** @type {any} */ input
+  ) => ({
     ok: true,
     ...auth.confirmPasswordReset({
       channel: input.channel === 'email' ? 'email' : 'sms',
@@ -386,7 +505,10 @@ const ROUTES = [
   ['POST', 'contact', contact]
 ];
 
-function matchRoute(method, segments) {
+function matchRoute(
+  /** @type {string} */ method,
+  /** @type {string[]} */ segments
+) {
   for (const [routeMethod, pattern, handler] of ROUTES) {
     if (routeMethod !== method) continue;
     const parts = pattern.split('/');
@@ -406,7 +528,11 @@ function matchRoute(method, segments) {
   return null;
 }
 
-async function handleApi(req, res, url) {
+async function handleApi(
+  /** @type {Req} */ req,
+  /** @type {Res} */ _res,
+  /** @type {string} */ url
+) {
   store.prune();
 
   const method = req.method.toUpperCase();
