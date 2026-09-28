@@ -77,7 +77,7 @@ WB.onReady(async () => {
     ordersHost.replaceChildren(
       ...orders.map((order) => {
         const summary = order.lines
-          .map((line /** @type {object} */ line) => `${line.qty} × ${line.name}`)
+          .map(( /** @type {object} */) => `${line.name || line.title || line.id}`)
           .join(' · ');
 
         const reorderButton = el('button', {
@@ -85,7 +85,7 @@ WB.onReady(async () => {
           type: 'button',
           text: 'Reorder',
           on: {
-            click: async (event) => {
+            click: async (/** @type {event} */ event) => {
               const button = event.currentTarget;
               WB.setBusy(button, true, 'Adding…');
               try {
@@ -167,14 +167,14 @@ WB.onReady(async () => {
     zoneSelect.replaceChildren(
       el('option', { value: '', text: 'No usual area' }),
       el('option', { value: delivery.pickup.id, text: `${delivery.pickup.name} (always free)` }),
-      ...delivery.zones.map((zone) => el('option', { value: zone.id, text: `${zone.name} — ${zone.feeLabel}` }))
+      ...delivery.zones.map((/** @type {object} */zone) => el('option', { value: zone.id, text: `${zone.name} — ${zone.feeLabel}` }))
     );
     zoneSelect.value = data.deliveryZoneId || '';
   } catch {
     qs('#a-zone').hidden = true;
   }
 
-  qs('#details-form').addEventListener('submit', async (event) => {
+  qs('#details-form').addEventListener('submit', async (/** @type {mouseEvent} */ event) => {
     event.preventDefault();
     const form = qs('#details-form');
     const name = qs('#a-name');
@@ -214,7 +214,7 @@ WB.onReady(async () => {
 
   /* ------------------------------------------------------------ change password */
 
-  qs('#password-form').addEventListener('submit', async (event) => {
+  qs('#password-form').addEventListener('submit', async (/** @type {mouseEvent} */event) => {
     event.preventDefault();
     const form = qs('#password-form');
     const current = qs('#a-current');
@@ -255,7 +255,7 @@ WB.onReady(async () => {
 
   /* -------------------------------------------------------------------- logout */
 
-  qs('#logout').addEventListener('click', async (event) => {
+  qs('#logout').addEventListener('click', async (/** @type {mouseEvent} */event) => {
     const button = event.currentTarget;
     WB.setBusy(button, true, 'Signing out…');
     try {
