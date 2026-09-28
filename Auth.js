@@ -552,4 +552,27 @@ WB.onReady(async () => {
       }
 
       const button = qs('#sms-submit');
-      WB.
+      WB.setBusy(button, true, 'Saving…');
+      try {
+        const result = await WB.api.post('/auth/reset/confirm', {
+          channel: 'sms',
+          identifier: phoneInput.value.trim(),
+          challengeId: params.get('challenge') || null,
+          code: code.value.trim(),
+          newPassword: password.value
+        });
+        WB.showNote(infoBox, result.message, 'ok');
+        smsForm.replaceChildren(
+          WB.el('a', {
+            class: 'btn btn-primary btn-block',
+            href: `/login?phone=${encodeURIComponent(phoneInput.value.trim())}`,
+        text: 'Go to sign in'
+          })
+        );
+      } catch (err) {
+        WB.showNote(errorBox, err.message, 'error');
+        WB.setBusy(button, false);
+      }
+    });
+  }
+});
