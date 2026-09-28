@@ -19,7 +19,11 @@ const config = require('./config');
 
 /** Provider field names — adjust to match your gateway's payload. */
 const PAYLOAD_KEYS = { to: 'to', message: 'message', sender: 'sender', channel: 'channel' };
-
+/**
+ * @param {NotifyChannel} channel
+ * @param {string} to
+ * @param {string} message
+ */
 function outbox(channel, to, message, meta = {}) {
   const line = [
     new Date().toISOString(),
@@ -42,7 +46,11 @@ function outbox(channel, to, message, meta = {}) {
     console.log(`\n[notify:${channel}] → ${to}\n${message}\n`);
   }
 }
-
+/**
+ * @param {NotifyChannel} channel
+ * @param {string} to
+ * @param {string} message
+ */
 async function send(channel, to, message, meta = {}) {
   if (!to) return { sent: false, reason: 'no recipient' };
 
@@ -75,30 +83,55 @@ async function send(channel, to, message, meta = {}) {
     return { sent: false, error: err.message };
   }
 }
-
+/**
+ * @param {string} to
+ * @param {string} message
+ * @param {NotifyMeta} [meta]
+ */
 const sendSms = (to, message, meta) => send('sms', to, message, meta);
+/**
+ * @param {string} to
+ * @param {string} message
+ * @param {NotifyMeta} [meta]
+ */
 const sendWhatsApp = (to, message, meta) => send('whatsapp', to, message, meta);
+/**
+ * @param {string} to
+ * @param {string} message
+ * @param {NotifyMeta} [meta]
+ */
 const sendEmail = (to, message, meta) => send('email', to, message, meta);
 
 /** Deep link that opens WhatsApp with the message already typed. */
+/**
+ * @param {string} text
+ * @param {string} [to]
+ */
 function whatsappLink(text, to = config.brand.whatsapp) {
   return `https://wa.me/${String(to).replace(/\D/g, '')}?text=${encodeURIComponent(text)}`;
 }
 
-const money = (n) => `RWF ${Number(n).toLocaleString('en-US')}`;
+const money = (/** @param {number|string} n */) => `RWF ${Number(n).toLocaleString('en-US')}`;
 
 /* ------------------------------------------------------------------ messages */
-
+/**
+ * @param {string} code
+ * @param {'login'|'reset'} purpose
+ * @param {number} minutes
+ */
 function otpMessage(code, purpose, minutes) {
   const what = purpose === 'reset' ? 'reset your Wheatburn password' : 'sign in to Wheatburn';
   return `Wheatburn: ${code} is your code to ${what}. It expires in ${minutes} minutes. Never share this code.`;
 }
-
+/**
+ * @param {string} link
+ * @param {number} minutes
+ */
 function resetLinkMessage(link, minutes) {
   return `Wheatburn: use this link within ${minutes} minutes to set a new password. ${link}\nIf you did not ask for this, ignore this message.`;
 }
 
-function orderConfirmationMessage(order) {
+function orderConfirmationMessage(/** @param {NotifyOrder} order */) {
   const lines = [
     `Wheatburn: order ${order.number} confirmed.`,
     `${order.itemCount} item${order.itemCount === 1 ? '' : 's'} — ${money(order.total)}`,
@@ -110,11 +143,14 @@ function orderConfirmationMessage(order) {
   ];
   return lines.join('\n');
 }
-
+/**
+ * @param {NotifyOrder} order
+ * @param {string} status
+ */
 function statusMessage(order, status) {
   return `Wheatburn: order ${order.number} is now ${status.label}. ${status.customerNote || ''}`.trim();
 }
-
+/** @param {NotifyOrder} order */
 function staffNewOrderMessage(order) {
   return [
     `NEW ORDER ${order.number}`,
@@ -122,16 +158,20 @@ function staffNewOrderMessage(order) {
     `${order.itemCount} items · ${money(order.total)}`,
     order.delivery.isPickup ? 'COLLECT at counter' : `${order.delivery.zoneName} — ${order.customer.address}`,
     `Payment: ${order.payment.label}`,
-    ...order.lines.map((l) => `  ${l.qty}× ${l.name} (${l.variantLabel})`)
+    ...order.lines.map((/** @type {{name: string, qty: number, lineTotalLabel: string}} */l) => `  ${l.qty}× ${l.name} (${l.variantLabel})`)
   ].join('\n');
 }
-
+/**
+ * @param {string} phone
+ * @param {string} code
+ * @param {'login'|'reset'} purpose
+ */
 async function sendOtp(phone, code, purpose) {
   const minutes = Math.round(config.security.otpTtlMs / 60000);
   return sendSms(phone, otpMessage(code, purpose, minutes), { purpose });
 }
 
-async function sendOrderConfirmation(order) {
+async function sendOrderConfirmation(/** @param {NotifyOrder} order */) {
   const message = orderConfirmationMessage(order);
   const sms = await sendSms(order.customer.phone, message, { order: order.number });
   if (order.customer.whatsappOptIn) {
@@ -140,7 +180,10 @@ async function sendOrderConfirmation(order) {
   await sendSms(config.brand.phone, staffNewOrderMessage(order), { order: order.number, staff: true });
   return sms;
 }
-
+/**
+ * @param {NotifyOrder} order
+ * @param {string} status
+ */
 async function sendStatusUpdate(order, status) {
   return sendSms(order.customer.phone, statusMessage(order, status), {
     order: order.number,
