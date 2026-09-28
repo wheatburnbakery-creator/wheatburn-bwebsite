@@ -9,8 +9,8 @@ window.WB = (function () {
   /* ------------------------------------------------------------------ fetch */
 
   const cache = { config: null, products: null, session: undefined };
-
-  async function request(method,path,body) {
+const PHONE_HINT = 'Use a valid Rwandan number, e.g. 078 123 4567.';
+  async function request(/** @type {string} */method, /** @type {string} */path, /** @type {any} */body) {
     const options = {
       method,
       credentials: 'same-origin',
@@ -51,30 +51,54 @@ window.WB = (function () {
   }
 
   const api = {
+    /**
+    * @param {string} path
+    */
     get: (path) => request('GET', path),
+
+    /**
+     * @param {string} path
+     * @param {any} [body]
+     */
     post: (path, body) => request('POST', path, body),
+
+    /**
+     * @param {string} path
+     * @param {any} [body]
+     */
     patch: (path, body) => request('PATCH', path, body)
-  };
-
-  /* ------------------------------------------------------------- small utils */
-
-  const esc = (value) =>
-    String(value === undefined || value === null ? '' : value)
+    /**
+    * @param {string} path
+    * @param {any} [body]
+    */ 
+ };
+/**
+* @param {any} value
+* @returns {string}
+*/
+  const tostring = (value) =>
+    value === undefined || value === null
+    ?''
+    :String(value)
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
 
-  /** Builds an element. Children may be nodes or strings. */
+  /** Builds an element. Children may be nodes or strings. 
+  * @param {string} tag
+  * @param {Record<string, any>} [props]
+  * @param {any []} [children]
+  */
   function el(tag, props, children) {
     const node = document.createElement(tag);
     if (props) {
       for (const [key, value] of Object.entries(props)) {
         if (value === null || value === undefined || value === false) continue;
-        if (key === 'class') node.className = value;
-        else if (key === 'text') node.textContent = value;
-        else if (key === 'html') node.innerHTML = value;
+        if (key === 'class') node.className = tostring(value);
+        else if (key === 'text') node.textContent = tostring(value);
+        else if (key === 'html') node.innerHTML = tostring(value??'');
         else if (key === 'dataset') Object.assign(node.dataset, value);
         else if (key === 'on') for (const [evt, fn] of Object.entries(value)) node.addEventListener(evt, fn);
         else if (value === true) node.setAttribute(key, '');
@@ -90,20 +114,35 @@ window.WB = (function () {
     return node;
   }
 
-  /** Rwandan francs are whole numbers, so formatting is simply thousands. */
+  /** Rwandan francs are whole numbers, so formatting is simply thousands. 
+  * @param {number|string} amount
+ * @returns {string}
+ */
   const money = (amount) => `RWF ${Number(amount || 0).toLocaleString('en-US')}`;
 
   const rwf = money;
-
+/**
+ * @param {string} selector
+ * @param {ParentNode} [root]
+ */
   const qs = (selector, root) => (root || document).querySelector(selector);
+  /**
+ * @param {string} selector
+ * @param {ParentNode} [root]
+ */
   const qsa = (selector, root) => Array.from((root || document).querySelectorAll(selector));
-
+/**
+ * @param {() => void} fn
+ */
   function onReady(fn) {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
     else fn();
   }
 
-  /** Shows a short status message at the bottom of the screen. */
+  /** Shows a short status message at the bottom of the screen. 
+   * @param {string} message
+ * @param {'ok'|'error'|'info'} [kind]
+ */
   function toast(message, kind) {
     let stack = qs('.toast-stack');
     if (!stack) {
@@ -115,7 +154,10 @@ window.WB = (function () {
     setTimeout(() => node.remove(), kind === 'error' ? 5200 : 3200);
   }
 
-  /** Marks a field invalid and shows the message underneath it. */
+  /** Marks a field invalid and shows the message underneath it. 
+  * @param {HTMLElement} input
+ * @param {string} message
+ */
   function setFieldError(input, message) {
     const field = input.closest('.field');
     if (!field) return;
@@ -128,20 +170,30 @@ window.WB = (function () {
       if (target) target.textContent = '';
     }
   }
-
+/**
+ * @param {HTMLFormElement|ParentNode} form
+ */
   function clearFieldErrors(form) {
     qsa('.field.invalid', form).forEach((f) => f.classList.remove('invalid'));
     qsa('.field-error', form).forEach((f) => (f.textContent = ''));
   }
 
-  /** Shows a note box (error, ok or plain) above or below a form. */
+  /** Shows a note box (error, ok or plain) above or below a form. 
+  * @param {HTMLElement} node
+ * @param {string} message
+ * @param {'ok'|'error'|'info'} [kind]
+ */
   function showNote(node, message, kind) {
     if (!node) return;
     node.hidden = !message;
     node.className = `form-note ${kind || ''}`.trim();
     node.innerHTML = message || '';
   }
-
+/**
+ * @param {HTMLButtonElement} button
+ * @param {boolean} busy
+ * @param {string} [busyLabel]
+ */
   function setBusy(button, busy, busyLabel) {
     if (!button) return;
     if (busy) {
@@ -154,7 +206,9 @@ window.WB = (function () {
     }
   }
 
-  /** Scrolls the first invalid field into view and focuses it. */
+  /** Scrolls the first invalid field into view and focuses it. 
+  * @param {HTMLFormElement|ParentNode} form
+ */
   function focusFirstInvalid(form) {
     const first = qs('.field.invalid .input, .field.invalid select, .field.invalid textarea', form);
     if (first) {
@@ -163,8 +217,10 @@ window.WB = (function () {
     }
   }
 
-  /** Rwandan mobile numbers: 078…, 25078… and +250 78… all mean the same person. */
-  const PHONE_HINT = 'Use a Rwandan mobile number, for example 0788 123 456.';
+  /** Rwandan mobile numbers: 078…, 25078… and +250 78… all mean the same person. 
+  * @param {string} value
+ * @returns {boolean}
+ */
   const isValidPhone = (value) => /^(?:\+?250|0)?7[2389]\d{7}$/.test(String(value).replace(/[\s()\-.]/g, ''));
 
   /* ------------------------------------------------------------ cached loads */
@@ -173,7 +229,10 @@ window.WB = (function () {
     if (!cache.config) cache.config = await api.get('/config');
     return cache.config;
   }
-
+/**
+ * @param {boolean} [force]
+ * @returns {Promise<any>}
+ */
   async function products(force) {
     if (!cache.products || force) {
       const data = await api.get('/products');
@@ -181,11 +240,25 @@ window.WB = (function () {
     }
     return cache.products;
   }
+/**
+ * @param {string|number} id
+ * @returns {any}
+ */
+  /**
+ * @typedef {Object} Product
+ * @property {string|number} id
+ */
 
+/**
+ * @param {string|number} id
+ * @returns {Product|undefined}
+ */
   function productById(id) {
-    return (cache.products || []).find((p) => p.id === id) || null;
+    return (cache.products || []).find(/** @param {product} p */ (p) => p.id === id) || null;
   }
-
+/**
+ * @param {boolean} force
+ */
   async function session(force) {
     if (cache.session === undefined || force) {
       try {
@@ -197,7 +270,9 @@ window.WB = (function () {
     }
     return cache.session;
   }
-
+/**
+ * @param {Product} user
+ */
   function setSession(user) {
     cache.session = user;
   }
@@ -212,8 +287,7 @@ window.WB = (function () {
     get: api.get,
     post: api.post,
     patch: api.patch,
-    el,
-    esc,
+    esc: tostring,
     money,
     rwf,
     qs,
