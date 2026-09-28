@@ -11,7 +11,7 @@ window.WB = window.WB || {};
 WB.ui = (function () {
   'use strict';
 
-  const { el, esc, money, qs, qsa, icons } = WB;
+  const { el, esc:_esc, money, qs, qsa:_qsa, icons } = WB;
   let cfg = null;
 
   const NAV = [
@@ -105,7 +105,10 @@ WB.ui = (function () {
     const host = qs('#site-footer');
     if (!host) return;
     const b = cfg.brand;
-
+/**
+ * @param {string} title
+ * @param {Array<{productId: string|number, variantId?: string|number, qty: number}>} items
+ */
     const column = (title, items) =>
       el('div', null, [
         el('h4', { text: title }),
@@ -157,7 +160,9 @@ WB.ui = (function () {
   }
 
   /* ---------------------------------------------------------- whatsapp button */
-
+/**
+ * @param {string} text
+ */
   function whatsappLink(text) {
     const number = String(cfg.brand.whatsapp).replace(/\D/g, '');
     return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
@@ -202,9 +207,9 @@ WB.ui = (function () {
         el('div', { class: 'drawer-foot', id: 'cart-foot' })
       ])
     ]);
-
-    drawer.addEventListener('click', (event) => {
-      if (event.target.closest('[data-close]')) closeCart();
+/** @param {MouseEvent} event */
+    drawer.addEventListener('click', (/** @type {MouseEvent} */ event)=> {const target = /** @type {HTMLElement} */ (event.target);
+      if (target.closest('[data-close]'));
     });
 
     document.body.append(drawer);
@@ -228,7 +233,9 @@ WB.ui = (function () {
     if (button) button.setAttribute('aria-expanded', 'false');
     document.removeEventListener('keydown', onEscape);
   }
-
+/**
+ * @param {Event} event
+ */
   function onEscape(event) {
     if (event.key === 'Escape') closeCart();
   }
@@ -263,12 +270,12 @@ WB.ui = (function () {
     const unknown = [];
 
     for (const line of lines) {
-      const product = products.find((p) => p.id === line.productId);
+      const product = products.find((/** * @param {*} p */) => p.id === line.productId);
       if (!product) {
         unknown.push(line);
         continue;
       }
-      const variant = product.variants.find((v) => v.id === line.variantId) || product.variants[0];
+      const variant = product.variants.find((/** @param {*} v */) => v.id === line.variantId) || product.variants[0];
       subtotal += variant.price * line.qty;
 
       rows.push(
@@ -316,7 +323,10 @@ WB.ui = (function () {
             class: 'btn btn-sm btn-ghost',
             type: 'button',
             text: 'Remove them',
-            on: { click: () => WB.cart.replace(lines.filter((l) => !unknown.includes(l))) }
+            
+            on: { click: () => WB.cart.replace(lines.filter((/**
+ * @param {{productId: string|number, variantId?: string|number, qty: number}} l
+ */) => !unknown.includes(l))) }
           })
         ])
       );
@@ -377,7 +387,10 @@ WB.ui = (function () {
    * gloss, a short description, the local inputs and the price — always visible,
    * never hidden behind a click.
    */
-  function productCard(product) {
+  
+  function productCard(/**
+ * @param {{id: string|number, title: string, price: number}} product
+ */) {
     const multi = product.variants.length > 1;
 
     const media = el('div', { class: 'product-media' }, [
@@ -400,7 +413,9 @@ WB.ui = (function () {
 
     const refresh = () => {
       const variant = multi
-        ? product.variants.find((v) => v.id === select.value) || product.variants[0]
+        ? product.variants.find((/**
+ * @param {*} v
+ */) => v.id === select.value) || product.variants[0]
         : product.variants[0];
       priceRow.replaceChildren(
         el('span', { class: 'price-tag', text: variant.priceLabel }),
@@ -456,7 +471,9 @@ WB.ui = (function () {
       on: {
         click: () => {
           const variant = multi
-            ? product.variants.find((v) => v.id === select.value) || product.variants[0]
+            ? product.variants.find((/**
+ * @param {*} v
+ */) => v.id === select.value) || product.variants[0]
             : product.variants[0];
           WB.cart.add({ productId: product.id, variantId: variant.id }, Number(qtyLabel.textContent));
           WB.toast(`${qtyLabel.textContent} × ${product.name} added to your basket.`, 'ok');
