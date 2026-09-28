@@ -11,7 +11,7 @@ WB.onReady(async () => {
 
   await WB.ui.init();
 
-  const { el, money, qs, qsa } = WB;
+  const { el, money, qs} = WB;
   const cfg = WB.ui.config;
   const LAST_ORDER_KEY = 'wheatburn.lastOrder';
 
@@ -36,12 +36,12 @@ WB.onReady(async () => {
   };
 
   /* ------------------------------------------------------------- utilities */
-
+/** @param {string} name */
   function showView(name) {
     for (const [key, node] of Object.entries(views)) node.hidden = key !== name;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
+/** @param {number} activeStep */
   function setStep(activeStep) {
     const order = ['basket', 'details', 'delivery', 'payment', 'done'];
     const index = order.indexOf(activeStep);
@@ -52,7 +52,8 @@ WB.onReady(async () => {
       node.classList.toggle('done', i < index);
     });
   }
-
+/** @param {string} message
+ *  @param {string} kind */
   function showCheckoutNote(message, kind) {
     WB.showNote(qs('#checkout-note'), message, kind);
   }
@@ -79,7 +80,7 @@ WB.onReady(async () => {
     qs('#payment-panel').hidden = false;
 
     host.replaceChildren(
-      ...lines.map((line) => {
+      ...lines.map((/** @type{{productId: string|number, variantId?: string|number, qty: number} line */) => {
         const product = state.products.find((p) => p.id === line.productId);
         if (!product) {
           return el('div', { class: 'cart-line' }, [
@@ -95,7 +96,7 @@ WB.onReady(async () => {
           ]);
         }
         const variant =
-          product.variants.find((v) => v.id === line.variantId) || product.variants[0];
+          product.variants.find((/** @type {{id: string|number}} */v) => v.id === line.variantId) || product.variants[0];
 
         return el('div', { class: 'cart-line' }, [
           el('img', { src: product.image, alt: '', loading: 'lazy' }),
@@ -134,12 +135,14 @@ WB.onReady(async () => {
   }
 
   /* ----------------------------------------------------------- zone choices */
-
   function renderZones() {
     const host = qs('#zone-choices');
     const choices = [];
-
-    const card = (zone, isPickup) =>
+/**
+ * @param {{id: string|number, name: string, feeLabel: string, etaText: string, confirmed?: boolean}} zone
+ * @param {boolean} isPickup
+ */
+    const card = (zone,  isPickup) =>
       el('label', { class: 'choice' }, [
         el('input', {
           type: 'radio',
@@ -244,14 +247,14 @@ WB.onReady(async () => {
       foot.replaceChildren();
       return;
     }
-
+/** @param {{productId: string|number, variantId?: string|number, qty: number}} line */
     rows.replaceChildren(
-      ...quote.lines.map((line) =>
+      ...quote.lines.map((/** @type {{productId: string|number, variantId?: string|number, qty: number, name: string, variantLabel: string, lineTotalLabel: string}} */ line)=>(
         el('div', { class: 'summary-row' }, [
           el('span', { text: `${line.qty} × ${line.name} (${line.variantLabel})` }),
           el('span', { text: line.lineTotalLabel })
         ])
-      ),
+      )),
       el('div', { class: 'summary-row' }, [
         el('span', { text: 'Subtotal' }),
         el('span', { text: quote.subtotalLabel })
@@ -276,15 +279,15 @@ WB.onReady(async () => {
       blocks.push(
         el('div', { class: 'form-note error mt-2' }, [
           el('p', { text: 'Some items need attention:' }),
-          el('ul', null, quote.problems.map((p) => el('li', { text: `${p.name || 'An item'}: ${p.reason}` }))),
+          el('ul', null, quote.problems.map((/** @type {{name?: string,reason: string, peoductid: string|number}} */p)=> el('li', { text: `${p.name || 'An item'}: ${p.reason}` }))),
           el('button', {
             class: 'btn btn-sm btn-ghost mt-1',
             type: 'button',
             text: 'Remove unavailable items',
             on: {
               click: () => {
-                const bad = new Set(quote.problems.map((p) => p.productId));
-                WB.cart.replace(WB.cart.read().filter((l) => !bad.has(l.productId)));
+                const bad = new Set(quote.problems.map((/** @type {{productid: string|number}}*/p) => p.productId));
+                WB.cart.replace(WB.cart.read().filter((/** @type {{productid: string|number}}*/l) => !bad.has(l.productId)));
               }
             }
           })
@@ -433,7 +436,8 @@ WB.onReady(async () => {
 
   /* ---------------------------------------------------------- confirmation UI */
 
-  function statusTimeline(order) {
+  /** @param {{timeline?: Array<*>, delivery: {isPickup: boolean, address?: string}}} order */
+function statusTimeline(order) {                            
     const done = new Set(order.timeline.map((t) => t.status));
     const steps = [
       { id: 'confirmed', label: 'Confirmed', note: 'Order received and added to the bake list.' },
@@ -453,7 +457,7 @@ WB.onReady(async () => {
       ]);
     });
   }
-
+/** @param {{number: string, customer: {name: string, phone: string}, payment: {status: string, label: string, instructions: string, payTo?: string, reference?: string}, whatsappUrl: string, trackingCode: string, lines: Array<{name: string, variantLabel: string, qty: number, lineTotalLabel: string}>, subtotalLabel: string, deliveryFeeLabel: string, totalLabel: string, delivery: {isPickup: boolean, zoneName: string, address?: string, etaText: string, needsConfirmation?: boolean}, dispatch: {text: string, reason: string}, guest: boolean, timeline?: Array<*>}} order */
   function renderConfirmation(order) {
     qs('#confirm-message').textContent = `Thank you, ${order.customer.name.split(' ')[0]} — your order is with us.`;
     qs('#confirm-number').textContent = order.number;
@@ -483,7 +487,7 @@ WB.onReady(async () => {
     qs('#confirm-timeline').replaceChildren(...statusTimeline(order));
 
     qs('#confirm-lines').replaceChildren(
-      ...order.lines.map((line) =>
+      ...order.lines.map((/** @type {{name: string, variantLabel: string, qty: number, lineTotalLabel: string}} */ line) =>
         el('tr', null, [
           el('td', null, [el('strong', { text: line.name }), el('div', { class: 'small', text: line.variantLabel })]),
           el('td', { class: 'num', text: String(line.qty) }),
@@ -505,14 +509,13 @@ WB.onReady(async () => {
     );
     qs('#confirm-total').textContent =
       'Retail prices include 18% VAT. Nothing has been charged on this website.';
-
     qs('#confirm-delivery').replaceChildren(
       el('div', { class: 'summary-row' }, [el('span', { text: order.delivery.isPickup ? 'Collection' : 'Area' }), el('strong', { text: order.delivery.zoneName })]),
       order.delivery.address ? el('p', { class: 'small mt-1', text: order.delivery.address }) : null,
       el('div', { class: 'summary-row' }, [el('span', { text: 'Estimated' }), el('span', { text: order.delivery.etaText })]),
       el('p', { class: 'small mt-1', text: `${order.dispatch.text} — ${order.dispatch.reason}` }),
       order.delivery.needsConfirmation
-        ? el('div', { class: 'form-note warn mt-2', text: 'This area is not on our regular round yet. We will call to confirm before dispatch.' })
+? el('div', { class: 'form-note warn mt-2', text: 'This area is not on our regular round yet. We will call to confirm before dispatch.' })
         : null
     );
 
@@ -541,5 +544,15 @@ WB.onReady(async () => {
       accountPanel.hidden = true;
     }
   }
+  const [config, products] = await Promise.all([WB.config(), WB.products()]);
 
-  /* ----------------------------------------------------------------- tr
+  state.products = products;
+  state.zones = config.zones;
+  state.pickup = config.pickup;
+  state.methods = config.paymentMethods;
+
+  renderBasket();
+  renderZones();
+  renderPayments();
+  await refreshQuote();
+  });
