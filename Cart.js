@@ -30,7 +30,9 @@ WB.cart = (function () {
       return [];
     }
   }
-
+/**
+ * @param {Array<{productId: string|number, variantId?: string|number, qty: number}>} lines
+ */
   function write(lines) {
     try {
       localStorage.setItem(KEY, JSON.stringify(lines));
@@ -52,7 +54,9 @@ WB.cart = (function () {
     }
     window.dispatchEvent(new CustomEvent('wb:basket', { detail }));
   }
-
+/**
+ * @param {Function} listener
+ */
   function onChange(listener) {
     listeners.add(listener);
     return () => listeners.delete(listener);
@@ -63,6 +67,10 @@ WB.cart = (function () {
   }
 
   /** Adding the same product and variant twice increases the quantity. */
+  /**
+ * @param {{productId: string|number, variantId?: string|number, qty: number}} item
+ * @param {number} qty
+ */
   function add(item, qty) {
     const lines = read();
     const productId = String(item.productId || item.id);
@@ -75,7 +83,11 @@ WB.cart = (function () {
 
     return write(lines);
   }
-
+/**
+ * @param {string|number} productId
+ * @param {string|number} [variantId]
+ * @param {number} [qty]
+ */
   function setQty(productId, variantId, qty) {
     const amount = Math.floor(Number(qty) || 0);
     let lines = read();
@@ -87,17 +99,26 @@ WB.cart = (function () {
     }
     return write(lines);
   }
-
+/**
+ * @param {string|number} productId
+ * @param {string|number} variantId
+ */
   const increase = (productId, variantId) => {
     const line = read().find((l) => l.productId === productId && l.variantId === variantId);
     return setQty(productId, variantId, (line ? line.qty : 0) + 1);
   };
-
+/**
+ * @param {string|number} productId
+ * @param {string|number} variantId
+ */
   const decrease = (productId, variantId) => {
     const line = read().find((l) => l.productId === productId && l.variantId === variantId);
     return setQty(productId, variantId, (line ? line.qty : 0) - 1);
   };
-
+/**
+ * @param {string|number} productId
+ * @param {string|number} variantId
+ */
   const remove = (productId, variantId) => setQty(productId, variantId, 0);
   const clear = () => write([]);
 
@@ -110,6 +131,9 @@ WB.cart = (function () {
     }));
 
   /** Replaces the basket, used by "reorder" and by a shared link. */
+  /**
+ * @param {Array<{productId: string|number, variantId?: string|number, qty: number}>} items
+ */
   function replace(items) {
     return write(
       (items || []).map((item) => ({
