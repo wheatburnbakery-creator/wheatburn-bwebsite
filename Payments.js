@@ -66,7 +66,9 @@ const METHODS = [
 function list({ includeDisabled = false } = {}) {
   return METHODS.filter((m) => includeDisabled || m.enabled).map(publicShape);
 }
-
+/**
+ * @param {string} method
+ */
 function publicShape(method) {
   return {
     id: method.id,
@@ -80,11 +82,15 @@ function publicShape(method) {
     payTo: method.payTo
   };
 }
-
+/**
+ * @param {string} id
+ */
 function get(id) {
   return METHODS.find((m) => m.id === id);
 }
-
+/**
+ * @param {string} id
+ */
 function getOrThrow(id) {
   const method = get(id);
   if (!method || !method.enabled) {
@@ -98,6 +104,10 @@ function getOrThrow(id) {
  * Cash on delivery is settled in person; everything else is only "paid" once
  * someone at the bakery has reconciled the reference.
  */
+/**
+ * @param {string} method
+ * @param {string} reference
+ */
 function initialState(method, reference) {
   if (method.requiresReference && !reference) {
     return { status: 'awaiting_reference', paid: false };
@@ -109,6 +119,10 @@ function initialState(method, reference) {
 }
 
 /** Customer-facing instructions attached to the confirmation screen and SMS. */
+/**
+ * @param {{id: string, payTo?: string}} method
+ * @param {number} total
+ */
 function instructionsFor(method, total) {
   if (method.id === 'cod') {
     return `Please have ${total} ready in cash. The rider confirms payment at the door.`;
