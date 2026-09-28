@@ -78,7 +78,7 @@ const TRANSITIONS = {
   delivered: [],
   cancelled: []
 };
-
+/** @param {string} id */
 function statusMeta(id) {
   return STATUSES.find((s) => s.id === id) || STATUSES[0];
 }
@@ -107,7 +107,7 @@ function orderNumber(now = new Date()) {
  * @param {string} input.baseUrl        used to build the tracking link
  * @param {string} input.ip
  */
-async function createOrder({ items, customer, deliveryZoneId, payment, user, baseUrl = '', ip }) {
+async function createOrder({ items, customer, deliveryZoneId, payment, user, baseUrl = _ip }) {
   const channel = user?.channel === 'wholesale' ? 'wholesale' : 'retail';
 
   // 1. Price the basket from server data. The browser's numbers are ignored.
@@ -227,7 +227,7 @@ async function createOrder({ items, customer, deliveryZoneId, payment, user, bas
 
 /* --------------------------------------------------------------- serialising */
 
-function serialize(order) {
+function serialize(/** @param {{id: string, status: string, lines: Array<object>, ...}} order */) {
   const status = statusMeta(order.status);
   const isPickup = Boolean(order.delivery?.isPickup);
   return {
@@ -240,7 +240,7 @@ function serialize(order) {
     timeline: order.timeline,
     channel: order.channel,
     itemCount: order.itemCount,
-    lines: order.lines.map((line) => ({
+    lines: order.lines.map((/** @param {{sku: string, qty: number, price: number, ...}} line */) => ({
       ...line,
       lineTotalLabel: catalog.formatRwf(line.lineTotal),
       unitPriceLabel: catalog.formatRwf(line.unitPrice)
@@ -300,7 +300,7 @@ function serialize(order) {
       hour: '2-digit',
       minute: '2-digit'
     }),
-    reorderItems: order.lines.map((l) => ({
+    reorderItems: order.lines.map((/** @type {{sku: string}} */l) => ({
       productId: l.productId,
       variantId: l.variantId,
       qty: l.qty
@@ -309,20 +309,24 @@ function serialize(order) {
 }
 
 /* ------------------------------------------------------------------- reading */
-
+/** @param {string} userId */
 function listForUser(userId, { limit = 50 } = {}) {
   return store
     .data()
-    .orders.filter((o) => o.userId === userId)
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .orders.filter((/** @type {{userId: string}} */ o) => o.userId === userId)
+    .sort((/** @type {{createdAt: string}} */a,/** @type {{createdAt: string}} */ b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, limit)
     .map(serialize);
 }
 
 /** A guest can look up an order with the order number plus the phone on it. */
+/**
+ * @param {string} number
+ * @param {string} phone
+ */
 function findByNumberAndPhone(number, phone) {
   const wanted = String(number || '').trim().toUpperCase();
-  const order = store.data().orders.find((o) => o.number === wanted);
+  const order = store.data().orders.find((/** @type {{number: string, phone: string}} */o) => o.number === wanted);
   if (!order) throw new HttpError(404, 'We could not find that order number.', 'order_not_found');
 
   const given = String(phone || '').replace(/\D/g, '').slice(-9);
@@ -332,9 +336,12 @@ function findByNumberAndPhone(number, phone) {
   }
   return serialize(order);
 }
-
+/**
+ * @param {string} orderId
+ * @param {User} user
+ */
 function findOwned(orderId, user) {
-  const order = store.data().orders.find((o) => o.id === orderId || o.number === orderId);
+  const order = store.data().orders.find((/** @type {{id: string}} */o) => o.id === orderId || o.number === orderId);
   if (!order) throw new HttpError(404, 'We could not find that order.', 'order_not_found');
   if (order.userId !== user.id) {
     throw new HttpError(403, 'That order belongs to another account.', 'order_forbidden');
@@ -345,7 +352,7 @@ function findOwned(orderId, user) {
 /* ------------------------------------------------------------- status changes */
 
 function advanceStatus({ orderId, status, note, by = 'staff', notifyCustomer = true }) {
-  const order = store.data().orders.find((o) => o.id === orderId || o.number === orderId);
+  const order = store.data().orders.find((/** @type {{id: string}} */o) => o.id === orderId || o.number === orderId);
   if (!order) throw new HttpError(404, 'We could not find that order.', 'order_not_found');
 
   const target = statusMeta(status);
@@ -380,6 +387,10 @@ function advanceStatus({ orderId, status, note, by = 'staff', notifyCustomer = t
 }
 
 /** Reorder hands the basket straight back — the customer only confirms. */
+/**
+ * @param {string} orderId
+ * @param {User} user
+ */
 function reorderPayload(orderId, user) {
   const order = findOwned(orderId, user);
   const now = new Date();
@@ -407,11 +418,12 @@ function reorderPayload(orderId, user) {
 }
 
 /** Dashboard summary counters. */
+/** @param {string} userId */
 function statsForUser(userId) {
-  const orders = store.data().orders.filter((o) => o.userId === userId);
+  const orders = store.data().orders.filter((/** @type {{id: string}} */o) => o.userId === userId);
   const spend = orders
-    .filter((o) => o.status !== 'cancelled')
-    .reduce((sum, o) => sum + o.total, 0);
+    .filter((/** @type {{userId: string}} */o) => o.status !== 'cancelled')
+    .reduce((/** @type {number} */sum, /** @type {{total: number}} */o) => sum + o.total, 0);
   const favourite = {};
   for (const order of orders) {
     for (const line of order.lines) {
@@ -421,7 +433,7 @@ function statsForUser(userId) {
   const top = Object.entries(favourite).sort((a, b) => b[1] - a[1])[0];
   return {
     orderCount: orders.length,
-    activeCount: orders.filter((o) => !['delivered', 'cancelled'].includes(o.status)).length,
+    activeCount: orders.filter((/** @type {{status: string}} */o) => !['delivered', 'cancelled'].includes(o.status)).length,
     lifetimeSpend: spend,
     lifetimeSpendLabel: catalog.formatRwf(spend),
     favouriteItem: top ? { name: top[0], qty: top[1] } : null
