@@ -58,7 +58,7 @@ WB.onReady(async () => {
     }
   }
 
-  form.addEventListener('submit', async (event) => {
+  form.addEventListener('submit', async (/** @type {SubmitEvent} */event) => {
     event.preventDefault();
     WB.clearFieldErrors(form);
     WB.showNote(errorBox, '');
