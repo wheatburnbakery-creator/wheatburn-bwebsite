@@ -15,10 +15,10 @@ const { HttpError } = require('./http');
 const DATA = JSON.parse(fs.readFileSync(path.join(config.DATA_DIR, 'delivery.json'), 'utf8'));
 
 function zones() {
-  return DATA.zones.map((z) => ({ ...z, feeLabel: feeLabel(z.fee) }));
+  return DATA.zones.map((/** @type {{id: string, name: string, ...}} */ z) => ({ ...z, feeLabel: feeLabel(z.fee) }));
 }
 
-function feeLabel(fee) {
+function feeLabel(/** @type {number} */fee) {
   return fee === 0 ? 'Free' : `${DATA.currency} ${Number(fee).toLocaleString('en-US')}`;
 }
 
@@ -26,9 +26,9 @@ function pickup() {
   return { ...DATA.pickup, feeLabel: 'Free' };
 }
 
-function zoneById(id) {
+function zoneById(/** @type {string} */id) {
   if (id === DATA.pickup.id) return pickup();
-  return DATA.zones.find((z) => z.id === id);
+  return DATA.zones.find((/** @type {{id: string}} */z) => z.id === id);
 }
 
 function requirements() {
@@ -46,9 +46,12 @@ function requirements() {
 /**
  * Resolves the delivery fee for a zone and basket total.
  * Pickup is always free; delivery is free above the configured basket value.
+ * @param {string} zoneid
+ * @param {number} subtotal
+ * @param {{channel?: string}}
  */
-function resolve(zoneId, subtotal, { channel = 'retail' } = {}) {
-  const zone = zoneById(zoneId);
+function resolve(zoneid,subtotal) {
+  const zone = zoneById(zoneid);
   if (!zone) {
     throw new HttpError(400, 'Choose a delivery area from the list.', 'unknown_zone');
   }
