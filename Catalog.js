@@ -21,7 +21,7 @@ const CURRENCY = DATA.currency || 'RWF';
 const VAT_INCLUDED = DATA.vatIncluded !== false;
 const MAX_QTY_PER_LINE = 99;
 
-const byId = new Map(DATA.products.map((p) => [p.id, p]));
+const byId = new Map(DATA.products.map((/** @type {{id: string}} */ p) => [p.id, p]));
 
 function categories() {
   return DATA.categories.slice();
@@ -30,6 +30,10 @@ function categories() {
 /**
  * Seasonal products are only orderable inside their months. Everything else is
  * orderable whenever `available` is true.
+ */
+/**
+ * @param {{available: boolean, availability?: {type: string, months?: number[]}}} product
+ * @param {Date} [now]
  */
 function orderable(product, now = new Date()) {
   if (product.available === false) {
@@ -45,22 +49,26 @@ function orderable(product, now = new Date()) {
   return { ok: true };
 }
 
-function priceFor(product, variant, channel) {
+function priceFor(
+  /** @type {any} */ _product,
+  /** @type {{sku?: string, priceRwf?: number, wholesalePriceRwf?: number}} */ variant,
+  /** @type {string} */ channel
+) {
   if (channel === 'wholesale') {
     return Number(variant.wholesale ?? variant.retail);
   }
   return Number(variant.retail);
 }
 
-function formatRwf(amount) {
+function formatRwf(/** @type {number} */amount) {
   return `${CURRENCY} ${Number(amount).toLocaleString('en-US')}`;
 }
 
 /** Shape sent to the browser. Both prices are always visible. */
-function serialize(product, { channel = 'retail', now = new Date() } = {}) {
+function serialize(/** @type {any} */product, { channel = 'retail', now = new Date() } = {}) {
   const status = orderable(product, now);
-  const retail = Math.min(...product.variants.map((v) => v.retail));
-  const wholesale = Math.min(...product.variants.map((v) => Number(v.wholesale ?? v.retail)));
+  const retail = Math.min(...product.variants.map((/** @type {any} */v) => v.retail));
+  const wholesale = Math.min(...product.variants.map((/** @type {any} */v) => Number(v.wholesale ?? v.retail)));
   return {
     id: product.id,
     name: product.name,
@@ -81,7 +89,7 @@ function serialize(product, { channel = 'retail', now = new Date() } = {}) {
     fromPriceLabel: formatRwf(channel === 'wholesale' ? wholesale : retail),
     retailFromLabel: formatRwf(retail),
     wholesaleFromLabel: formatRwf(wholesale),
-    variants: product.variants.map((v) => ({
+    variants: product.variants.map((/** @type {any} */v) => ({
       id: v.id,
       label: v.label,
       retail: v.retail,
@@ -94,22 +102,22 @@ function serialize(product, { channel = 'retail', now = new Date() } = {}) {
 
 function list({ category, featured, q, channel = 'retail', now = new Date() } = {}) {
   let items = DATA.products;
-  if (category && category !== 'all') items = items.filter((p) => p.category === category);
-  if (featured) items = items.filter((p) => p.featured);
+  if (category && category !== 'all') items = items.filter((/** @type {{category: string}} */p) => p.category === category);
+  if (featured) items = items.filter((/** @type {{featured: boolean}} */p) => p.featured);
   if (q) {
     const needle = String(q).trim().toLowerCase();
-    items = items.filter((p) =>
+    items = items.filter((/** @type {{category: strinv}} */p) =>
       [p.name, p.gloss, p.short, p.rwandanInputs].join(' ').toLowerCase().includes(needle)
     );
   }
-  return items.map((p) => serialize(p, { channel, now }));
+  return items.map((/** @type {{name: string, gloss: string, short: string, rwandan...}} */p) => serialize(p, { channel, now }));
 }
 
-function get(id) {
+function get(/** @type {string} */id) {
   return byId.get(String(id));
 }
 
-function getOrThrow(id) {
+function getOrThrow(/** @type {string} */id) {
   const product = byId.get(String(id));
   if (!product) throw new HttpError(404, 'That product is not on our menu.', 'unknown_product');
   return product;
@@ -120,7 +128,9 @@ function getOrThrow(id) {
  * Returns priced lines plus any problems found, so the API can tell the
  * customer exactly which line changed rather than failing the whole order.
  */
-function quote(items, { channel = 'retail', now = new Date() } = {}) {
+function quote(
+  /** @type {Array<{sku: string, qty: number}>} */ items,
+  /** @type {{channel?: string, now?: Date}} */{ channel = 'retail', now = new Date() } = {}) {
   if (!Array.isArray(items) || items.length === 0) {
     throw new HttpError(400, 'Your basket is empty.', 'empty_cart');
   }
@@ -141,7 +151,7 @@ function quote(items, { channel = 'retail', now = new Date() } = {}) {
       continue;
     }
     const variant =
-      product.variants.find((v) => v.id === String(raw?.variantId)) || product.variants[0];
+      product.variants.find((/** @type {{id: string}} */v) => v.id === String(raw?.variantId)) || product.variants[0];
 
     if (!Number.isFinite(qty) || qty < 1) {
       problems.push({ productId, name: product.name, reason: 'Quantity must be at least 1.' });
