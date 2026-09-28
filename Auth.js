@@ -27,12 +27,17 @@ WB.onReady(async () => {
     if (next && next.startsWith('/')) return next;
     return WB.cart.count() > 0 ? '/order?welcome=1' : '/account';
   }
-
+/** @param {string} url */
   function go(url) {
     location.assign(url);
   }
 
   /** Shows a development-only code hint, so the flow is testable offline. */
+  /**
+ * @param {HTMLElement} node
+ * @param {{devCode?: string}} payload
+ * @param {string} label
+ */
   function showDevCode(node, payload, label) {
     if (!node || !payload || !payload.devCode) return;
     node.hidden = false;
@@ -67,7 +72,7 @@ WB.onReady(async () => {
       qs('#p-phone').value = phonePrefill;
       qs('#o-phone').value = phonePrefill;
     }
-
+/** @param {'password'|'otp'} which */
     function selectTab(which) {
       const isPassword = which === 'password';
       tabPassword.setAttribute('aria-selected', String(isPassword));
@@ -82,7 +87,7 @@ WB.onReady(async () => {
     if (params.get('mode') === 'otp') selectTab('otp');
 
     /* ---- password ---- */
-    qs('#password-form').addEventListener('submit', async (event) => {
+    qs('#password-form').addEventListener('submit', async (/** @type {SubmitEvent} */event) => {
       event.preventDefault();
       const phone = qs('#p-phone');
       const password = qs('#p-password');
@@ -120,7 +125,7 @@ WB.onReady(async () => {
     let otpPhase = 'send';
     let challengeId = null;
 
-    qs('#otp-form').addEventListener('submit', async (event) => {
+    qs('#otp-form').addEventListener('submit', async (/** @type {SubmitEvent} */event) => {
       event.preventDefault();
       const phone = qs('#o-phone');
       const code = qs('#o-code');
@@ -228,7 +233,7 @@ WB.onReady(async () => {
     const help = qs('#password-help');
     if (help) help.textContent = `At least ${minLength} characters, with one letter and one number.`;
 
-    form.addEventListener('submit', async (event) => {
+    form.addEventListener('submit', async (/** @type {SubmitEvent} */event) => {
       event.preventDefault();
       WB.clearFieldErrors(form);
       WB.showNote(errorBox, '');
@@ -311,7 +316,7 @@ WB.onReady(async () => {
     let channel = 'sms';
     let challengeId = null;
     let enteredCode = null;
-
+/** @param {'ask'|'code'|'new'|'done'} name */
     function showPanel(name) {
       for (const [key, node] of Object.entries(panels)) node.hidden = key !== name;
       const order = ['ask', 'code', 'new'];
@@ -325,7 +330,7 @@ WB.onReady(async () => {
 
     const tabSms = qs('#tab-sms');
     const tabEmail = qs('#tab-email');
-    function selectChannel(which) {
+    function selectChannel(/** @param {'sms'|'email'} which*/) {
       channel = which;
       tabSms.setAttribute('aria-selected', String(which === 'sms'));
       tabEmail.setAttribute('aria-selected', String(which === 'email'));
@@ -339,7 +344,7 @@ WB.onReady(async () => {
     if (params.get('channel') === 'email') selectChannel('email');
     if (params.get('phone')) qs('#f-phone').value = params.get('phone');
 
-    qs('#ask-form').addEventListener('submit', async (event) => {
+    qs('#ask-form').addEventListener('submit', async (/** @type {SubmitEvent} */event) => {
       event.preventDefault();
       WB.clearFieldErrors(qs('#ask-form'));
       WB.showNote(errorBox, '');
@@ -381,7 +386,7 @@ WB.onReady(async () => {
       }
     });
 
-    qs('#code-form').addEventListener('submit', (event) => {
+    qs('#code-form').addEventListener('submit', (/** @type {SubmitEvent} */event) => {
       event.preventDefault();
       WB.clearFieldErrors(qs('#code-form'));
       const code = qs('#f-code');
@@ -402,7 +407,7 @@ WB.onReady(async () => {
       showPanel('ask');
     });
 
-    qs('#new-form').addEventListener('submit', async (event) => {
+    qs('#new-form').addEventListener('submit', async (/** @type {SubmitEvent} */event) => {
       event.preventDefault();
       WB.clearFieldErrors(qs('#new-form'));
       const password = qs('#f-new');
@@ -474,6 +479,11 @@ WB.onReady(async () => {
     const minLength = (WB.ui.config.security && WB.ui.config.security.minPasswordLength) || 8;
 
     /** Shared client-side password checks for both modes. */
+    /**
+ * @param {HTMLInputElement} password
+ * @param {HTMLInputElement} password2
+ * @param {HTMLFormElement} form
+ */
     function validatePasswords(password, password2, form) {
       WB.clearFieldErrors(form);
       let ok = true;
@@ -492,7 +502,7 @@ WB.onReady(async () => {
       return ok;
     }
 
-    linkForm.addEventListener('submit', async (event) => {
+    linkForm.addEventListener('submit', async (/** @type {SubmitEvent} */event) => {
       event.preventDefault();
       const password = qs('#n-password');
       const password2 = qs('#n-password2');
@@ -518,7 +528,7 @@ WB.onReady(async () => {
       }
     });
 
-    smsForm.addEventListener('submit', async (event) => {
+    smsForm.addEventListener('submit', async (/** @type {SubmitEvent} */event) => {
       event.preventDefault();
       const phoneInput = qs('#n-phone');
       const code = qs('#n-code');
@@ -542,18 +552,4 @@ WB.onReady(async () => {
       }
 
       const button = qs('#sms-submit');
-      WB.setBusy(button, true, 'Saving…');
-      try {
-        const result = await WB.api.post('/auth/reset/confirm', {
-          channel: 'sms',
-          identifier: phoneInput.value.trim(),
-          challengeId: params.get('challenge') || null,
-          code: code.value.trim(),
-          newPassword: password.value
-        });
-        WB.showNote(infoBox, result.message, 'ok');
-        smsForm.replaceChildren(
-          WB.el('a', {
-            class: 'btn btn-primary btn-block',
-            href: `/login?phone=${encodeURIComponent(phoneInput.value.trim())}`,
-         
+      WB.
