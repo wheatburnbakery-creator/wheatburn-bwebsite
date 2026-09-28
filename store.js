@@ -12,7 +12,6 @@
  */
 
 const fs = require('node:fs');
-const path = require('node:path');
 const config = require('./config');
 
 const EMPTY_DB = {
@@ -97,7 +96,7 @@ function data() {
 }
 
 /** Monotonic per-day sequence, used for readable order numbers. */
-function nextSequence(key) {
+function nextSequence(/** @type {string} */key) {
   const d = load();
   d.counters[key] = (d.counters[key] || 0) + 1;
   save();
@@ -113,10 +112,10 @@ function prune(now = Date.now()) {
     d.resetTokens.length +
     d.rateLimits.length;
 
-  d.sessions = d.sessions.filter((s) => s.expiresAt > now);
-  d.otpChallenges = d.otpChallenges.filter((c) => c.expiresAt > now - 60_000);
-  d.resetTokens = d.resetTokens.filter((t) => t.expiresAt > now && !t.usedAt);
-  d.rateLimits = d.rateLimits.filter((r) => r.windowStart > now - 24 * 60 * 60 * 1000);
+  d.sessions = d.sessions.filter((/** @type {any} */s) => s.expiresAt > now);
+  d.otpChallenges = d.otpChallenges.filter((/** @type {any} */c) => c.expiresAt > now - 60_000);
+  d.resetTokens = d.resetTokens.filter((/** @type {any} */t) => t.expiresAt > now && !t.usedAt);
+  d.rateLimits = d.rateLimits.filter((/** @type {{key: string}} */r) => r.windowStart > now - 24 * 60 * 60 * 1000);
 
   const after =
     d.sessions.length +
@@ -126,22 +125,24 @@ function prune(now = Date.now()) {
 
   if (after !== before) save();
 }
-
+/**
+ * @param {(item: any) => boolean} predicate
+ */
 function findUser(predicate) {
   return load().users.find(predicate);
 }
-
+/** @param {string} phone */
 function findUserByPhone(phone) {
   return findUser((u) => u.phone === phone);
 }
-
+/** @param {string} email */
 function findUserByEmail(email) {
   if (!email) return undefined;
   const needle = String(email).trim().toLowerCase();
   return findUser((u) => u.email === needle);
 }
 
-function insertUser(user) {
+function insertUser(/** @type {User} */user) {
   const d = load();
   d.users.push(user);
   save();
