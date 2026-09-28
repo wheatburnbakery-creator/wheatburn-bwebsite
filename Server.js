@@ -25,8 +25,14 @@ const NOT_FOUND_PAGE = `<!DOCTYPE html>
 <p class="lede">The link you followed does not exist. Everything we bake is one tap away.</p>
 <p><a class="btn btn-primary" href="/">Back to the shop</a></p>
 </main></body></html>`;
-
-const server = http.createServer(async (req, res) => {
+/**
+ * @param {import('http').IncomingMessage} req
+ * @param {import('http').ServerResponse} res
+ */
+const server = http.createServer(async (
+  /** @type {import('http').IncomingMessage} */ req,
+  /** @type {import('http').ServerResponse} */ res
+) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   res.req = req;
 
@@ -67,7 +73,9 @@ const server = http.createServer(async (req, res) => {
     }
   }
 });
-
+/**
+ * @param {string} signal
+ */
 function shutdown(signal) {
   console.log(`\n[server] ${signal} received — saving data and closing.`);
   try {
