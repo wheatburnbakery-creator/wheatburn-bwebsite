@@ -30,7 +30,12 @@ const MIME = {
 
 /** An error a route may throw to produce a clean JSON error response. */
 class HttpError extends Error {
-  constructor(status, message, code, details) {
+  constructor(
+    /** @type {number} */ status,
+    /** @type {string} */ message,
+    /** @type {string} */ code,
+    /** @type {any} */ details
+  ) {
     super(message);
     this.status = status;
     this.code = code || 'error';
@@ -38,7 +43,11 @@ class HttpError extends Error {
   }
 }
 
-function send(res, status, body, headers = {}) {
+function send(
+/** @type {Res} */ res,
+  /** @type {number} */ status,
+  /** @type {any} */ body,
+  /** @type {Record<string, string>} */ headers = {}) {
   const payload = body === undefined || body === null ? '' : body;
   res.writeHead(status, {
     'Content-Length': Buffer.byteLength(payload),
@@ -51,7 +60,11 @@ function send(res, status, body, headers = {}) {
   res.end(payload);
 }
 
-function json(res, status, payload, headers = {}) {
+function json(
+  /** @type {Res} */ res,
+  /** @type {number} */ status,
+  /** @type {any} */ payload,
+  /** @type {Record<string, string>} */headers = {}) {
   send(res, status, JSON.stringify(payload), {
     'Content-Type': 'application/json; charset=utf-8',
     'Cache-Control': 'no-store',
@@ -59,7 +72,7 @@ function json(res, status, payload, headers = {}) {
   });
 }
 
-function applySecurityHeaders(res) {
+function applySecurityHeaders(/** @type {Res} */res) {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
@@ -80,11 +93,11 @@ function applySecurityHeaders(res) {
 }
 
 /** Reads the raw request body with a hard size cap so a large POST cannot exhaust memory. */
-function readBody(req, maxBytes = 64 * 1024) {
+function readBody(/** @type {Req} */req, maxBytes = 64 * 1024) {
   return new Promise((resolve, reject) => {
     const chunks = [];
     let size = 0;
-    req.on('data', (chunk) => {
+    req.on('data', (/** @type {Buffer} */chunk) => {
       size += chunk.length;
       if (size > maxBytes) {
         reject(new HttpError(413, 'That request is too large.', 'payload_too_large'));
@@ -99,7 +112,7 @@ function readBody(req, maxBytes = 64 * 1024) {
 }
 
 /** Accepts JSON or classic form posts, so the API works from fetch and from plain HTML. */
-async function readInput(req) {
+async function readInput(/** @type {Req} */req) {
   const raw = await readBody(req);
   if (!raw) return {};
   const type = String(req.headers['content-type'] || '');
@@ -113,7 +126,7 @@ async function readInput(req) {
   return Object.fromEntries(new URLSearchParams(raw));
 }
 
-function parseCookies(req) {
+function parseCookies(/** @type {Req} */req) {
   const header = req.headers.cookie;
   if (!header) return {};
   const out = {};
@@ -127,7 +140,11 @@ function parseCookies(req) {
   return out;
 }
 
-function setCookie(res, name, value, opts = {}) {
+function setCookie(
+  /** @type {Res} */ res,
+  /** @type {string} */ name,
+  /** @type {string} */ value,
+  /** @type {{path?: string, maxAge?: number, expires?: Date, httpOnly?: boolean, sameSite?: string}} */opts = {}) {
   const bits = [`${name}=${encodeURIComponent(value)}`];
   bits.push(`Path=${opts.path || '/'}`);
   if (opts.maxAge !== undefined) bits.push(`Max-Age=${Math.floor(opts.maxAge)}`);
@@ -140,11 +157,11 @@ function setCookie(res, name, value, opts = {}) {
   res.setHeader('Set-Cookie', existing ? [].concat(existing, cookie) : cookie);
 }
 
-function clearCookie(res, name) {
+function clearCookie(/** @type {Req} */res,/** @type {string} */name) {
   setCookie(res, name, '', { maxAge: 0 });
 }
 
-function clientIp(req) {
+function clientIp(/** @type {Req} */req) {
   const forwarded = req.headers['x-forwarded-for'];
   if (forwarded) return String(forwarded).split(',')[0].trim();
   return req.socket.remoteAddress || 'unknown';
@@ -155,7 +172,11 @@ function clientIp(req) {
  * the shop can use /menu instead of /menu.html.
  * Returns true when a file was sent.
  */
-function serveStatic(req, res, url) {
+function serveStatic(
+  /** @type {Req} */ req,
+  /** @type {Res} */ res,
+  /** @type {string} */ _url
+) {
   let pathname;
   try {
     pathname = decodeURIComponent(url.pathname);
