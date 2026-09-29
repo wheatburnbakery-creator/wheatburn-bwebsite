@@ -91,7 +91,7 @@ process.on('SIGINT', () => shutdown('SIGINT'));
 process.on('SIGTERM', () => shutdown('SIGTERM'));
 
 if (require.main === module) {
-  server.listen(config.PORT, config.HOST, () => {
+  require('./src/store').init().catch((e) => { console.error('[store] init failed:', e.message); process.exit(1); }).then(() => server.listen(config.PORT, config.HOST, () => {
     console.log('');
     console.log(`  Wheatburn shop running  →  http://localhost:${config.PORT}`);
     console.log(`  Environment            →  ${config.NODE_ENV}`);
@@ -100,7 +100,7 @@ if (require.main === module) {
       console.log('  SMS / WhatsApp         →  console + data/outbox.log (no provider configured)');
     }
     console.log('');
-  });
+  }));
 }
 
 module.exports = server;

@@ -26,6 +26,7 @@ const EMPTY_DB = {
   meta: { createdAt: null, version: 1 }
 };
 
+const remote = require('./remote');
 let db = null;
 let writeTimer = null;
 let dirty = false;
@@ -60,6 +61,7 @@ function load() {
 function flush() {
   if (!dirty) return;
   dirty = false;
+  if (remote.enabled) { remote.push(db); return; }
   ensureDir();
   const tmp = `${config.DB_FILE}.${process.pid}.tmp`;
   fs.writeFileSync(tmp, JSON.stringify(db, null, 2), 'utf8');
@@ -149,7 +151,15 @@ function insertUser(/** @type {User} */user) {
   return user;
 }
 
+async function init() {
+  if (!remote.enabled) return;
+  const saved = await remote.pull();
+  if (saved && Object.keys(saved).length) db = { ...structuredClone(EMPTY_DB), ...saved };
+  else load();
+}
+
 module.exports = {
+  init,
   data,
   save,
   saveNow,
