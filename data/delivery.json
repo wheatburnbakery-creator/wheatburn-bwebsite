@@ -1,0 +1,20 @@
+{
+  "currency": "USD",
+  "status": "open",
+  "notice": "",
+  "cutoffHour": 14,
+  "cutoffNotice": "Orders after 2 PM ship the next day.",
+  "deliveryDays": [1, 2, 3, 4, 5, 6],
+  "closedNotice": "We're closed for deliveries right now.",
+  "outsideZone": "Sorry, we don't deliver to that area yet.",
+  "pickup": {
+    "id": "pickup",
+    "name": "Pickup",
+    "fee": 0,
+    "etaText": "Ready in 1 hour"
+  },
+  "zones": [
+    { "id": "zone-1", "name": "Nearby", "fee": 5, "etaText": "Same day" },
+    { "id": "zone-2", "name": "Further out", "fee": 10, "etaText": "1-2 days" }
+  ]
+}

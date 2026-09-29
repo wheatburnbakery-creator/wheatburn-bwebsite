@@ -1,0 +1,25 @@
+{
+  "currency": "RWF",
+  "vatIncluded": true,
+  "priceNote": "Prices include VAT. Placeholder prices.",
+  "sourceNote": "Placeholder catalogue, replace with real data.",
+  "categories": [
+    {"id": "breads", "label": "Breads"},
+    {"id": "cakes", "label": "Cakes"},
+    {"id": "snacks", "label": "Snacks"},
+    {"id": "gifts", "label": "Gifts"}
+  ],
+  "products": [
+    {"id": "umugati-wimyumbati", "name": "Umugati w'imyumbati", "gloss": "Cassava bread", "category": "breads", "unit": "loaf", "image": "/assets/img/umugati-wimyumbati.jpg", "short": "Soft everyday loaf made with local cassava flour.", "rwandanInputs": "cassava flour", "featured": true, "available": true, "leadTimeHours": 0, "variants": [{"id": "loaf", "label": "Loaf", "retail": 2500, "wholesale": 1500}]},
+    {"id": "umugati-wamasaka", "name": "Umugati w'amasaka", "gloss": "Sorghum bread", "category": "breads", "unit": "loaf", "image": "/assets/img/umugati-wamasaka.jpg", "short": "Hearty brown loaf baked with Rwandan sorghum.", "rwandanInputs": "sorghum flour", "featured": false, "available": true, "leadTimeHours": 0, "variants": [{"id": "loaf", "label": "Loaf", "retail": 2800, "wholesale": 1800}]},
+    {"id": "amandazi-yibijumba", "name": "Amandazi y'ibijumba", "gloss": "Sweet potato mandazi", "category": "snacks", "unit": "piece", "image": "/assets/img/amandazi-yibijumba.jpg", "short": "Golden mandazi made with sweet potato.", "rwandanInputs": "sweet potato", "featured": true, "available": true, "leadTimeHours": 0, "variants": [{"id": "piece", "label": "Piece", "retail": 1200, "wholesale": 800}]},
+    {"id": "umukate-mukuru", "name": "Umukate mukuru", "gloss": "Celebration cake", "category": "cakes", "unit": "cake", "image": "/assets/img/umukate-mukuru.jpg", "short": "Large celebration cake for parties and events.", "rwandanInputs": "local eggs, butter", "featured": true, "available": true, "leadTimeHours": 24, "confirmNote": "We confirm design and date by phone.", "variants": [{"id": "large", "label": "Large", "retail": 45000, "wholesale": 40000}]},
+    {"id": "umukate-wubuki-nigitoki", "name": "Umukate w'ubuki n'igitoki", "gloss": "Honey banana cake", "category": "cakes", "unit": "cake", "image": "/assets/img/umukate-wubuki-nigitoki.jpg", "short": "Moist banana cake sweetened with Rwandan honey.", "rwandanInputs": "honey, banana", "featured": false, "available": true, "leadTimeHours": 12, "variants": [{"id": "whole", "label": "Whole cake", "retail": 12000, "wholesale": 9500}]},
+    {"id": "gato-ya-ikivuguto", "name": "Gato ya ikivuguto", "gloss": "Ikivuguto cake", "category": "cakes", "unit": "slice box", "image": "/assets/img/gato-ya-ikivuguto.jpg", "short": "Tender cake made with traditional fermented milk.", "rwandanInputs": "ikivuguto", "featured": false, "available": true, "leadTimeHours": 6, "variants": [{"id": "box", "label": "Box", "retail": 2500, "wholesale": 2000}]},
+    {"id": "ibinyoro-bya-akabanga", "name": "Ibinyoro bya akabanga", "gloss": "Chilli biscuits", "category": "snacks", "unit": "pack", "image": "/assets/img/ibinyoro-bya-akabanga.jpg", "short": "Crunchy savoury biscuits with a chilli kick.", "rwandanInputs": "akabanga chilli oil", "featured": false, "available": true, "leadTimeHours": 0, "variants": [{"id": "pack", "label": "Pack", "retail": 500, "wholesale": 350}]},
+    {"id": "agaseke-kumuganura", "name": "Agaseke ka Kumuganura", "gloss": "Harvest festival basket", "category": "gifts", "unit": "basket", "image": "/assets/img/agaseke-kumuganura.jpg", "short": "Gift basket of baked goods for the harvest festival.", "rwandanInputs": "mixed local produce", "featured": true, "available": true, "leadTimeHours": 48, "availability": {"type": "seasonal", "months": [8], "note": "Only available in August."}, "variants": [{"id": "basket", "label": "Basket", "retail": 25000, "wholesale": 22000}]},
+    {"id": "imigati-mito", "name": "Imigati mito", "gloss": "Soft dinner rolls", "category": "snacks", "unit": "6 rolls", "image": "/assets/img/imigati-mito.jpg", "short": "Six soft rolls baked fresh every morning.", "rwandanInputs": "local wheat blend", "featured": false, "available": true, "leadTimeHours": 0, "variants": [{"id": "six", "label": "6 rolls", "retail": 3000, "wholesale": 2200}]},
+    {"id": "amandazi-y-ibitoki", "name": "Amandazi y'ibitoki", "gloss": "Banana mandazi", "category": "snacks", "unit": "piece", "image": "/assets/img/amandazi-y-ibitoki.jpg", "short": "Sweet mandazi made with ripe banana.", "rwandanInputs": "banana", "featured": false, "available": true, "leadTimeHours": 0, "variants": [{"id": "piece", "label": "Piece", "retail": 1000, "wholesale": 700}]},
+    {"id": "agaseke-gato", "name": "Agaseke k'udutsima", "gloss": "Sweet treats basket", "category": "gifts", "unit": "basket", "image": "/assets/img/agaseke-gato.jpg", "short": "Basket of assorted cakes and biscuits for gifts.", "rwandanInputs": "honey, local butter", "featured": false, "available": true, "leadTimeHours": 24, "variants": [{"id": "basket", "label": "Basket", "retail": 18000, "wholesale": 15000}]}
+  ]
+}
