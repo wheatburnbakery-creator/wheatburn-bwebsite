@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 /**
  * Outbound SMS, WhatsApp and email.
  *

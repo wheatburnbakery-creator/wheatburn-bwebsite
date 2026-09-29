@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My orders — Wheatburn Bakery</title>
+<meta name="description" content="Your Wheatburn account: order history, order status, saved delivery address and one-tap reorder.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23b4521e'/><text x='16' y='23' font-family='Georgia,serif' font-size='19' fill='%23fdfaf5' text-anchor='middle'>W</text></svg>">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#b4521e">
+<link rel="stylesheet" href="/assets/css/shop.css">
+</head>
+<body data-page="account">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="site-header"></header>
+
+<main id="main">
+
+  <!-- shown when nobody is signed in -->
+  <section class="section sm" id="account-guard" hidden>
+    <div class="wrap tight">
+      <p class="eyebrow">Your account</p>
+      <h1 class="h-sm">Sign in to see your orders.</h1>
+      <p class="lede">Your order history, saved address and one-tap reorder live behind a sign-in.
+      You can still <a href="/menu">order as a guest</a> any time.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="/login">Sign in</a>
+        <a class="btn btn-ghost" href="/register">Create an account</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- shown when signed in -->
+  <section class="section sm" id="account-content" hidden>
+    <div class="wrap">
+
+      <div class="toolbar">
+        <div>
+          <p class="eyebrow">Your account</p>
+          <h1 class="h-sm" id="greeting">Welcome back.</h1>
+          <p class="small" id="account-meta"></p>
+        </div>
+        <button class="btn btn-ghost" type="button" id="logout">Sign out</button>
+      </div>
+
+      <div class="form-note error" id="account-error" hidden></div>
+      <div class="form-note ok" id="account-info" hidden></div>
+
+      <div class="stat-grid mt-2" id="stats"></div>
+
+      <div class="account-grid mt-3">
+
+        <!-- --------------------------- orders --------------------------- -->
+        <div>
+          <h2>Order history</h2>
+          <p class="small">Every order you have placed with this account, newest first. Status updates as
+          the bake moves along.</p>
+          <div id="orders"></div>
+        </div>
+
+        <!-- --------------------------- details --------------------------- -->
+        <aside>
+          <div class="panel">
+            <h2>Saved details</h2>
+            <p class="small">These fill in your checkout automatically. The phone number is how you sign
+            in, so it cannot be changed here — message us if it needs to change.</p>
+            <form class="form" id="details-form" novalidate>
+              <div class="field">
+                <label for="a-name">Name</label>
+                <input class="input" id="a-name" autocomplete="name" required>
+                <span class="field-error"></span>
+              </div>
+              <div class="field">
+                <label for="a-phone">Phone number</label>
+                <input class="input" id="a-phone" readonly>
+                <span class="help">Used to sign in and to send order confirmations.</span>
+              </div>
+              <div class="field">
+                <label for="a-email">Email (optional)</label>
+                <input class="input" id="a-email" type="email" autocomplete="email">
+                <span class="help">Only needed if you want email receipts or password resets by email.</span>
+                <span class="field-error"></span>
+              </div>
+              <div class="field">
+                <label for="a-address">Delivery address</label>
+                <textarea class="textarea" id="a-address" autocomplete="street-address"
+                  placeholder="Street, house number or building name, plus a landmark"></textarea>
+              </div>
+              <div class="field">
+                <label for="a-zone">Usual delivery area</label>
+                <select id="a-zone"></select>
+                <span class="help">Preselects the area at checkout. You can always change it.</span>
+              </div>
+              <label class="checkbox">
+                <input type="checkbox" id="a-whatsapp">
+                <span>Send confirmations on WhatsApp as well as SMS.</span>
+              </label>
+              <button class="btn btn-primary btn-block" type="submit" id="details-submit">Save my details</button>
+            </form>
+          </div>
+
+          <div class="panel">
+            <h2>Password</h2>
+            <form class="form" id="password-form" novalidate>
+              <div class="field">
+                <label for="a-current">Current password</label>
+                <input class="input" id="a-current" type="password" autocomplete="current-password" required>
+                <span class="field-error"></span>
+              </div>
+              <div class="field">
+                <label for="a-new">New password</label>
+                <input class="input" id="a-new" type="password" autocomplete="new-password" required>
+                <span class="help">At least 8 characters, with one letter and one number.</span>
+                <span class="field-error"></span>
+              </div>
+              <button class="btn btn-ghost btn-block" type="submit" id="password-submit">Change my password</button>
+            </form>
+            <p class="small mt-1">Changing your password signs out every other device.</p>
+          </div>
+
+          <div class="panel">
+            <h2>Security</h2>
+            <ul class="small mb-0">
+              <li>One-time SMS codes expire after 5 minutes and can only be used once.</li>
+              <li>Five wrong codes and the code is dead — ask for a fresh one.</li>
+              <li>You are signed in for 7 days on this device only. <strong>Sign out</strong> above ends it immediately.</li>
+              <li>Your password is stored as a hash. Nobody at Wheatburn can read it.</li>
+            </ul>
+          </div>
+
+          <div class="panel">
+            <h2>Prefer to talk?</h2>
+            <p class="small">Message the counter on WhatsApp and we will sort it by hand.</p>
+            <a class="btn btn-ghost btn-block" id="wa-account" href="#" target="_blank" rel="noopener">WhatsApp the bakery</a>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/ui.js"></script>
+<script src="/assets/js/account.js"></script>
+</body>
+</html>

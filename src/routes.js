@@ -530,7 +530,7 @@ function matchRoute(
 
 async function handleApi(
   /** @type {Req} */ req,
-  /** @type {Res} */ _res,
+  /** @type {Res} */ res,
   /** @type {string} */ url
 ) {
   store.prune();

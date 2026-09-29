@@ -175,7 +175,7 @@ function clientIp(/** @type {Req} */req) {
 function serveStatic(
   /** @type {Req} */ req,
   /** @type {Res} */ res,
-  /** @type {string} */ _url
+  /** @type {string} */ url
 ) {
   let pathname;
   try {

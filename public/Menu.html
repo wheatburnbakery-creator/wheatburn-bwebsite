@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menu &amp; prices — Wheatburn Bakery, Kigali</title>
+<meta name="description" content="The full Wheatburn menu with prices: cassava composite loaves, sorghum-millet rukacarara, sweet-potato mandazi, tree-tomato tartlets, ikivuguto cheesecake, groundnut cookies, akabanga twists and celebration cakes. Order online in Kigali.">
+<meta property="og:title" content="Menu &amp; prices — Wheatburn Bakery">
+<meta property="og:description" content="Eleven local-first products, named in Kinyarwanda, with the price on every card.">
+<meta property="og:image" content="/assets/img/bread-range.jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23b4521e'/><text x='16' y='23' font-family='Georgia,serif' font-size='19' fill='%23fdfaf5' text-anchor='middle'>W</text></svg>">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#b4521e">
+<link rel="stylesheet" href="/assets/css/shop.css">
+</head>
+<body data-page="menu">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<noscript>
+  <div class="wrap section sm">
+    <p class="form-note warn">The menu needs JavaScript to add things to a basket. You can still
+    <a href="/contact">contact us</a> and we will take the order by phone or WhatsApp.</p>
+  </div>
+</noscript>
+
+<main id="main">
+
+  <section class="section sm">
+    <div class="wrap">
+      <p class="eyebrow">Menu</p>
+      <h1>Eleven products. Every price on the card.</h1>
+      <p class="lede">Bread carries the volume, confectionery carries the character. We keep the list
+      tight on purpose, so the same recipe, weight and finish arrives on every order. Retail prices
+      include 18% VAT.</p>
+    </div>
+  </section>
+
+  <section class="section sm">
+    <div class="wrap">
+
+      <div class="filters" id="filters" role="group" aria-label="Filter the menu">
+        <button class="filter" type="button" data-category="all" aria-pressed="true">Everything</button>
+      </div>
+
+      <div class="toolbar">
+        <label class="search">
+          <span class="label" hidden>Search the menu</span>
+          <input class="input" type="search" id="menu-search" placeholder="Search: sorghum, honey, mandazi…" autocomplete="off">
+        </label>
+        <p class="small" id="menu-count" aria-live="polite">Loading the range…</p>
+      </div>
+
+      <div class="products-grid" id="menu-grid" aria-busy="true"></div>
+
+      <div class="empty-state" id="menu-empty" hidden>
+        <div class="big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.6"/><path d="M15.8 15.8 20.5 20.5"/></svg></div>
+        <p>Nothing matches that search. Try a Kinyarwanda name, or clear the filters.</p>
+      </div>
+
+      <div class="note mt-3">
+        <h4>Sold in bigger quantities?</h4>
+        <p>Cafés, hotels, offices and shops buy on a standing order with a separate trade price list,
+        two-week trial and buy-back on unsold stock. Message us on WhatsApp or use the
+        <a href="/contact">contact form</a> and we will send the wholesale price book.</p>
+        <p class="small mb-0">Nothing in this list contains nuts except the groundnut cookies, which are
+        made with groundnut paste. Ask us about the gluten-free line if you need it separated.</p>
+      </div>
+
+      <div class="btn-row">
+        <a class="btn btn-primary" href="/order">Go to checkout</a>
+        <button class="btn btn-ghost" type="button" id="open-basket-menu">View my basket</button>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/ui.js"></script>
+<script src="/assets/js/menu.js"></script>
+</body>
+</html>

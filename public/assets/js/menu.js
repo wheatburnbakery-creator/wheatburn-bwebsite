@@ -42,7 +42,7 @@ WB.onReady(async () => {
   }
 
   /* ---------------------------------------------------------------- filters */
-
+/** @param {Array<{id: string|number, name: string}>} categories */
   function buildFilters(categories) {
     const buttons = [
       el('button', {
@@ -66,11 +66,11 @@ WB.onReady(async () => {
     }
     filterBar.replaceChildren(...buttons);
 
-    filterBar.addEventListener('click', (event) => {
+    filterBar.addEventListener('click', (/** @type {Event} */event) => {
       const button = event.target.closest('.filter');
       if (!button) return;
       category = button.dataset.category;
-      WB.qsa('.filter', filterBar).forEach((b) =>
+      WB.qsa('.filter', filterBar).forEach((/** @type {HTMLElement} */b) =>
         b.setAttribute('aria-pressed', String(b === button))
       );
       render();
@@ -97,8 +97,8 @@ WB.onReady(async () => {
 
   // A product can be added from a link like /menu?add=<id>, useful from a message.
   const addId = new URLSearchParams(location.search).get('add');
-  if (addId && products.some((p) => p.id === addId)) {
-    const product = products.find((p) => p.id === addId);
+  if (addId && products.some((/** @type {{id: string|number, category?: string|number}} */p) => p.id === addId)) {
+    const product = products.find((/** @type {{id: string|number, category?: string|number}} */p) => p.id === addId);
     WB.cart.add({ productId: product.id, variantId: product.variants[0].id }, 1);
     WB.toast(`${product.name} added to your basket.`, 'ok');
   }
