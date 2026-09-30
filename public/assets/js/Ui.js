@@ -152,7 +152,7 @@ WB.ui = (function () {
           ])
         ]),
         el('div', { class: 'footer-note' }, [
-          el('p', { text: `© ${new Date().getFullYear()} ${b.name}. Prices in Rwandan francs; VAT-inclusive on retail prices, VAT-exclusive for trade.` }),
+          el('p', { text: `© ${new Date().getFullYear()} ${b.name}. All rights reserved. Content, photos and design may not be copied or used to train AI without written permission. Prices in Rwandan francs; VAT-inclusive on retail prices, VAT-exclusive for trade.` }),
           el('p', { text: 'Address, phone number, email and delivery zones are placeholders pending confirmation — see SITE-TODO.md.' })
         ])
       ])
