@@ -8,7 +8,7 @@ window.WB = (function () {
 
   /* ------------------------------------------------------------------ fetch */
 
-  const cache = { config: null, products: null, session: undefined };
+  const cache = { config: null, delivery: null, products: null, session: undefined };
   const PHONE_HINT = 'Use a valid Rwandan number, e.g. 078 123 4567.';
   const plain = (value) => (value === undefined || value === null ? '' : String(value));
   async function request(/** @type {string} */method, /** @type {string} */path, /** @type {any} */body) {
@@ -226,6 +226,16 @@ window.WB = (function () {
 
   /* ------------------------------------------------------------ cached loads */
 
+  async function delivery() {
+    if (!cache.delivery) cache.delivery = await api.get("/delivery");
+    return cache.delivery;
+  }
+
+  async function delivery() {
+    if (!cache.delivery) cache.delivery = await api.get("/delivery");
+    return cache.delivery;
+  }
+
   async function config() {
     if (!cache.config) cache.config = await api.get('/config');
     return cache.config;
@@ -308,7 +318,7 @@ window.WB = (function () {
     icons: {
       loaf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9.6c0-2.3 3.1-4.1 7-4.1s7 1.8 7 4.1v6.2c0 1.7-3.1 3-7 3s-7-1.3-7-3V9.6Z"/><path d="M9 8.3 10.6 12.1"/><path d="M12.5 7.7 14.1 11.5"/></svg>'
     },
-    config,
+    config, delivery,
     products,
     productById,
     session,
