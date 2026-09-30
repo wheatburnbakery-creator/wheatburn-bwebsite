@@ -2,3 +2,5 @@
 !/data/products.json
 !/data/delivery.json
 node_modules/
+server.log
+*.bak

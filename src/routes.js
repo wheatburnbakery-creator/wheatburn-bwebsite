@@ -57,11 +57,11 @@ const storefront = () => ({
 });
 
 function listProducts( 
-/** @type {Req} */_req,
-  /** @type {Res} */ _res,
+/** @type {Req} */req,
+  /** @type {Res} */ res,
   /** @type {string} */ url,
-   /** @type {Record<string, string>} */ _params,
-   /** @type {any} */ _input,
+   /** @type {Record<string, string>} */ params,
+   /** @type {any} */ input,
                      ) {
   const channel = url.searchParams.get('channel') === 'wholesale' ? 'wholesale' : 'retail';
   return {
@@ -77,11 +77,11 @@ function listProducts(
 }
 
 function getProduct(
-  /** @type {Req} */ _req,
-  /** @type {Res} */ _res,
+  /** @type {Req} */ req,
+  /** @type {Res} */ res,
   /** @type {string} */ url,
- /** @type {Record<string, string>} */ _params,
-   /** @type {any} */ _input 
+ /** @type {Record<string, string>} */ params,
+   /** @type {any} */ input 
                    ) {
   const channel = url.searchParams.get('channel') === 'wholesale' ? 'wholesale' : 'retail';
   const product = catalog.getOrThrow(params.id);
@@ -100,11 +100,11 @@ const paymentInfo = () => ({ methods: payments.list() });
 
 /** Live basket pricing — used by the order page on every change. */
 function quoteCart(
-  /** @type {Req} */ _req,
-  /** @type {Res} */ _res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
-  /** @type {any} */ _input
+  /** @type {Req} */ req,
+  /** @type {Res} */ res,
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
+  /** @type {any} */ input
 ) {
   const channel = input.channel === 'wholesale' ? 'wholesale' : 'retail';
   const items = Array.isArray(input.items) ? input.items : [];
@@ -153,10 +153,10 @@ function quoteCart(
 /* -------------------------------------------------------------------- account */
 
 async function register(
-  /** @type {Req} */ _req,
-  /** @type {Res} */ _res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
+  /** @type {Req} */ req,
+  /** @type {Res} */ res,
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
   /** @type {any} */ input
 ) {
   const user = auth.createUser({
@@ -172,10 +172,10 @@ async function register(
 }
 
 async function loginPassword(
-  /** @type {Req} */ _req,
-  /** @type {Res} */ _res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
+  /** @type {Req} */ req,
+  /** @type {Res} */ res,
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
   /** @type {any} */ input
 ) {
   const result = await auth.loginWithPassword({
@@ -189,10 +189,10 @@ async function loginPassword(
 }
 
 async function startOtp(
-  /** @type {Req} */ _req,
-  /** @type {Res} */ _res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
+  /** @type {Req} */ req,
+  /** @type {Res} */ res,
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
   /** @type {any} */ input
 ) {
   const purpose = input.purpose === 'reset' ? 'reset' : 'login';
@@ -210,10 +210,10 @@ async function startOtp(
 }
 
 async function verifyOtpLogin(
-  /** @type {Req} */ _req,
-  /** @type {Res} */ _res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
+  /** @type {Req} */ req,
+  /** @type {Res} */ res,
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
   /** @type {any} */ input
 ) {
   const result = await auth.loginWithOtp({
@@ -254,8 +254,8 @@ async function dashboard(/** @type {Req} */req,/** @type {Res} */ res) {
 async function patchAccount(
   /** @type {Req} */ req,
   /** @type {Res} */ res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
   /** @type {any} */ input
 ) {
   const { user } = auth.requireUser(req, res);
@@ -265,8 +265,8 @@ async function patchAccount(
 async function changePassword(
   /** @type {Req} */ req,
   /** @type {Res} */ res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
   /** @type {any} */ input
 ) {
   const { user, session: _session} = auth.requireUser(req, res);
@@ -285,9 +285,9 @@ async function changePassword(
 
 async function createOrder(
   /** @type {Req} */ req,
-  /** @type {Res} */ _res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
+  /** @type {Res} */ res,
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
   /** @type {any} */ input
 ) {
   const found = auth.sessionFromRequest(req);
@@ -306,7 +306,7 @@ async function createOrder(
   };
 }
 
-async function myOrders(/** @type {Req} */req,/** @type {Res} */_res) {
+async function myOrders(/** @type {Req} */req,/** @type {Res} */res) {
   const { user } = auth.requireUser(req, res);
   return { orders: orders.listForUser(user.id) };
 }
@@ -314,10 +314,10 @@ async function myOrders(/** @type {Req} */req,/** @type {Res} */_res) {
 /** A signed-in owner, or a guest with the matching order number and phone. */
 async function getOrder(
   /** @type {Req} */ req,
-  /** @type {Res} */ _res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
-  /** @type {any} */ _input
+  /** @type {Res} */ res,
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
+  /** @type {any} */ input
 ) {
   const found = auth.sessionFromRequest(req);
   const number = params.number;
@@ -335,10 +335,10 @@ async function getOrder(
 }
 
 async function trackOrder(
-  /** @type {Req} */ _req,
-  /** @type {Res} */ _res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
+  /** @type {Req} */ req,
+  /** @type {Res} */ res,
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
   /** @type {any} */ input
 ) {
   return { order: orders.findByNumberAndPhone(input.number, input.phone) };
@@ -347,9 +347,9 @@ async function trackOrder(
 async function reorder(
   /** @type {Req} */ req,
   /** @type {Res} */ res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
-  /** @type {any} */ _input
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
+  /** @type {any} */ input
 ) {
   const { user } = auth.requireUser(req, res);
   return orders.reorderPayload(params.id, user);
@@ -359,7 +359,7 @@ async function reorder(
 
 async function staffOrders(
   /** @type {Req} */ req,
-  /** @type {Res} */ _res,
+  /** @type {Res} */ res,
   /** @type {string} */ url
 ) {
   requireStaff(req);
@@ -376,9 +376,9 @@ async function staffOrders(
 
 async function staffSetStatus(
   /** @type {Req} */ req,
-  /** @type {Res} */ _res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
+  /** @type {Res} */ res,
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
   /** @type {any} */ input
 ) {
   requireStaff(req);
@@ -397,9 +397,9 @@ async function staffSetStatus(
 
 async function contact(
   /** @type {Req} */ req,
-  /** @type {Res} */ _res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
+  /** @type {Res} */ res,
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
   /** @type {any} */ input
 ) {
   const name = String(input.name || '').trim();
@@ -455,8 +455,8 @@ const ROUTES = [
   ['POST', 'auth/reset/start', async (
     /** @type {Req} */ req,
   /** @type {Res} */ res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
   /** @type {any} */ input
   ) => ({
     ...(await auth.startPasswordReset({
@@ -468,10 +468,10 @@ const ROUTES = [
     }))
   })],
   ['POST', 'auth/reset/confirm', async (
-    /** @type {Req} */ _req,
-  /** @type {Res} */ _res,
-  /** @type {string} */ _url,
-  /** @type {Record<string, string>} */ _params,
+    /** @type {Req} */ req,
+  /** @type {Res} */ res,
+  /** @type {string} */ url,
+  /** @type {Record<string, string>} */ params,
   /** @type {any} */ input
   ) => ({
     ok: true,

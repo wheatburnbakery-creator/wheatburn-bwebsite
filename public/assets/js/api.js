@@ -236,6 +236,11 @@ window.WB = (function () {
     return cache.delivery;
   }
 
+  async function delivery() {
+    if (!cache.delivery) cache.delivery = await api.get("/delivery");
+    return cache.delivery;
+  }
+
   async function config() {
     if (!cache.config) cache.config = await api.get('/config');
     return cache.config;
