@@ -80,7 +80,7 @@ WB.onReady(async () => {
     qs('#payment-panel').hidden = false;
 
     host.replaceChildren(
-      ...lines.map((/** @type{{productId: string|number, variantId?: string|number, qty: number} */ line) => {
+      ...lines.map((/** @type{{productId: string|number, variantId?: string|number, qty: number} line */) => {
         const product = state.products.find((p) => p.id === line.productId);
         if (!product) {
           return el('div', { class: 'cart-line' }, [
@@ -343,7 +343,7 @@ WB.onReady(async () => {
       blocks.push(
         el('div', { class: 'form-note error mt-2' }, [
           el('p', { text: 'Some items need attention:' }),
-          el('ul', null, quote.problems.map((/** @type {{name?: string,reason: string, productId: string|number}} */p)=> el('li', { text: `${p.name || 'An item'}: ${p.reason}` }))),
+          el('ul', null, quote.problems.map((/** @type {{name?: string,reason: string, peoductid: string|number}} */p)=> el('li', { text: `${p.name || 'An item'}: ${p.reason}` }))),
           el('button', {
             class: 'btn btn-sm btn-ghost mt-1',
             type: 'button',
@@ -631,11 +631,11 @@ function statusTimeline(order) {
       accountPanel.hidden = true;
     }
   }
-  const [config, products, delivery] = await Promise.all([WB.config(), WB.products(), WB.delivery()]);
+  const [config, products] = await Promise.all([WB.config(), WB.products()]);
 
   state.products = products;
-  state.zones = delivery.zones;
-  state.pickup = delivery.pickup;
+  state.zones = config.zones;
+  state.pickup = config.pickup;
   state.methods = config.paymentMethods;
 
   renderBasket();

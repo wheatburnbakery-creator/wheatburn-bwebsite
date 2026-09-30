@@ -28,7 +28,7 @@ const S = config.security;
 const RW_MOBILE = /^(?:\+?250|0)?7[2389]\d{7}$/;
 
 /** Accepts 078…, 25078…, +250 78… and returns +2507XXXXXXXX. */
-function normalizePhone(/** @param {string} input */) {
+function normalizePhone(/** @param {string} input */ input) {
   const raw = String(input ?? '').replace(/[\s()\-.]/g, '');
   if (!raw) throw new HttpError(400, 'Enter your phone number.', 'phone_required');
   if (!RW_MOBILE.test(raw)) {
@@ -38,7 +38,7 @@ function normalizePhone(/** @param {string} input */) {
   return `+250${digits}`;
 }
 
-function maskPhone(/** @param {string} phone */) {
+function maskPhone(/** @param {string} phone */ phone) {
   const local = String(phone).replace(/\D/g, '').slice(3);
   if (local.length !== 9) return phone;
   return `+250 ${local.slice(0, 2)}* *** ${local.slice(6)}`;
@@ -46,7 +46,7 @@ function maskPhone(/** @param {string} phone */) {
 
 /* ---------------------------------------------------------------- passwords */
 
-function hashPassword(/** @param {string} password */) {
+function hashPassword(/** @param {string} password */ password) {
   const N = 16384;
   const r = 8;
   const p = 1;
@@ -86,7 +86,7 @@ const COMMON_PASSWORDS = new Set([
 ]);
 
 /** Registration and reset both use these rules, so they can never drift apart. */
-function assertPassword(/** @param {string} password */) {
+function assertPassword(/** @param {string} password */ password) {
   const value = String(password ?? '');
   if (value.length < S.minPasswordLength) {
     throw new HttpError(
@@ -143,7 +143,7 @@ function throttle(key, max, windowMs, message, code) {
   return result;
 }
 
-function clearLimit(/** @param {string} key */) {
+function clearLimit(/** @param {string} key */ key) {
   const d = store.data();
   d.rateLimits = d.rateLimits.filter((/** @type {{key: string}} */r) => r.key !== key);
   store.save();
@@ -288,7 +288,7 @@ function sessionFromToken(token) {
   return { session, user };
 }
 
-function sessionFromRequest(/** @param {object} req */) {
+function sessionFromRequest(/** @param {object} req */ req) {
   const cookies = parseCookies(req);
   return sessionFromToken(cookies[S.sessionCookie]);
 }

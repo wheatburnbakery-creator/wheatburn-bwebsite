@@ -81,16 +81,27 @@
 
             <div id="address-fields" class="form mt-2" hidden>
               <div class="field">
-                <label for="f-address">Delivery address</label>
-                <textarea class="textarea" id="f-address" autocomplete="street-address"
-                  placeholder="Street, house number or the building name"></textarea>
-                <span class="help">A landmark helps more than a street name in Kigali — “behind the Kicukiro market”, for example.</span>
-                <span class="field-error"></span>
-              </div>
-              <div class="field">
-                <label for="f-landmark">Nearest landmark (optional)</label>
-                <input class="input" id="f-landmark" placeholder="e.g. opposite the Kicukiro taxi park">
-              </div>
+            <label for="f-village">Village / Umudugudu</label>
+            <input class="input" id="f-village" autocomplete="off" placeholder="e.g. Rugando">
+            <span class="field-error"></span>
+          </div>
+          <div class="field">
+            <label for="f-street">Street / Road no.</label>
+            <input class="input" id="f-street" autocomplete="off" placeholder="e.g. KG 11 Ave">
+            <span class="field-error"></span>
+          </div>
+          <div class="field">
+            <label for="f-road-name">Road name (optional)</label>
+            <input class="input" id="f-road-name" autocomplete="off">
+            <span class="field-error"></span>
+          </div>
+          <div class="field">
+            <label for="f-house">House / Building no.</label>
+            <input class="input" id="f-house" autocomplete="off" placeholder="e.g. 24">
+            <span class="field-error"></span>
+          </div>
+          <textarea id="f-address" hidden></textarea>
+              <input id="f-landmark" hidden>
             </div>
 
             <p class="form-note mt-2" id="dispatch-note" hidden></p>
@@ -221,6 +232,7 @@
 
 <footer id="site-footer"></footer>
 
+<script src="/assets/js/debug3.js"></script>
 <script src="/assets/js/api.js"></script>
 <script src="/assets/js/cart.js"></script>
 <script src="/assets/js/ui.js"></script>

@@ -1,10 +1,17 @@
 {
-  "currency": "USD",
+  "currency": "RWF",
   "status": "open",
   "notice": "",
   "cutoffHour": 14,
   "cutoffNotice": "Orders after 2 PM ship the next day.",
-  "deliveryDays": [1, 2, 3, 4, 5, 6],
+  "deliveryDays": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
   "closedNotice": "We're closed for deliveries right now.",
   "outsideZone": "Sorry, we don't deliver to that area yet.",
   "pickup": {
@@ -14,7 +21,516 @@
     "etaText": "Ready in 1 hour"
   },
   "zones": [
-    { "id": "zone-1", "name": "Nearby", "fee": 5, "etaText": "Same day" },
-    { "id": "zone-2", "name": "Further out", "fee": 10, "etaText": "1-2 days" }
+    {
+      "id": "nyarugenge-gitega",
+      "name": "Gitega (Nyarugenge)",
+      "district": "Nyarugenge",
+      "sector": "Gitega",
+      "fee": 1500,
+      "etaText": "Same day",
+      "cells": [
+        "Akabahizi",
+        "Akabeza",
+        "Gacyamo",
+        "Kora",
+        "Kigarama",
+        "Kinyange"
+      ]
+    },
+    {
+      "id": "nyarugenge-kanyinya",
+      "name": "Kanyinya (Nyarugenge)",
+      "district": "Nyarugenge",
+      "sector": "Kanyinya",
+      "fee": 2500,
+      "etaText": "Same day",
+      "cells": [
+        "Nyamweru",
+        "Nzovu",
+        "Taba"
+      ]
+    },
+    {
+      "id": "nyarugenge-kigali",
+      "name": "Kigali (Nyarugenge)",
+      "district": "Nyarugenge",
+      "sector": "Kigali",
+      "fee": 1500,
+      "etaText": "Same day",
+      "cells": [
+        "Kigali",
+        "Mwendo",
+        "Nyabugogo",
+        "Ruriba",
+        "Rwesero"
+      ]
+    },
+    {
+      "id": "nyarugenge-kimisagara",
+      "name": "Kimisagara (Nyarugenge)",
+      "district": "Nyarugenge",
+      "sector": "Kimisagara",
+      "fee": 1800,
+      "etaText": "Same day",
+      "cells": [
+        "Kamuhoza",
+        "Katabaro",
+        "Kimisagara"
+      ]
+    },
+    {
+      "id": "nyarugenge-mageragere",
+      "name": "Mageragere (Nyarugenge)",
+      "district": "Nyarugenge",
+      "sector": "Mageragere",
+      "fee": 3000,
+      "etaText": "Same day",
+      "cells": [
+        "Kankuba",
+        "Kavumu",
+        "Mataba",
+        "Ntungamo",
+        "Nyarufunzo",
+        "Nyarurenzi",
+        "Runzenze"
+      ]
+    },
+    {
+      "id": "nyarugenge-muhima",
+      "name": "Muhima (Nyarugenge)",
+      "district": "Nyarugenge",
+      "sector": "Muhima",
+      "fee": 1500,
+      "etaText": "Same day",
+      "cells": [
+        "Amahoro",
+        "Kabasengerezi",
+        "Kabeza",
+        "Nyabugogo",
+        "Rugenge",
+        "Tetero",
+        "Ubumwe"
+      ]
+    },
+    {
+      "id": "nyarugenge-nyakabanda",
+      "name": "Nyakabanda (Nyarugenge)",
+      "district": "Nyarugenge",
+      "sector": "Nyakabanda",
+      "fee": 1800,
+      "etaText": "Same day",
+      "cells": [
+        "Munanira I",
+        "Munanira II",
+        "Nyakabanda I",
+        "Nyakabanda II"
+      ]
+    },
+    {
+      "id": "nyarugenge-nyamirambo",
+      "name": "Nyamirambo (Nyarugenge)",
+      "district": "Nyarugenge",
+      "sector": "Nyamirambo",
+      "fee": 1800,
+      "etaText": "Same day",
+      "cells": [
+        "Cyivugiza",
+        "Gasharu",
+        "Mumena",
+        "Rugarama"
+      ]
+    },
+    {
+      "id": "nyarugenge-nyarugenge",
+      "name": "Nyarugenge (Nyarugenge)",
+      "district": "Nyarugenge",
+      "sector": "Nyarugenge",
+      "fee": 1500,
+      "etaText": "Same day",
+      "cells": [
+        "Agatare",
+        "Biryogo",
+        "Kiyovu",
+        "Rwampara"
+      ]
+    },
+    {
+      "id": "nyarugenge-rwezamenyo",
+      "name": "Rwezamenyo (Nyarugenge)",
+      "district": "Nyarugenge",
+      "sector": "Rwezamenyo",
+      "fee": 1800,
+      "etaText": "Same day",
+      "cells": [
+        "Kabuguru I",
+        "Kabuguru II",
+        "Rwezamenyo I",
+        "Rwezamenyo II"
+      ]
+    },
+    {
+      "id": "gasabo-bumbogo",
+      "name": "Bumbogo (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Bumbogo",
+      "fee": 3000,
+      "etaText": "Same day",
+      "cells": [
+        "Kinyaga",
+        "Nkuzuzu",
+        "Nyabikenke",
+        "Musave",
+        "Nyagasozi",
+        "Ngara",
+        "Mvuzo"
+      ]
+    },
+    {
+      "id": "gasabo-gatsata",
+      "name": "Gatsata (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Gatsata",
+      "fee": 2200,
+      "etaText": "Same day",
+      "cells": [
+        "Nyamabuye",
+        "Nyamugari",
+        "Karuruma"
+      ]
+    },
+    {
+      "id": "gasabo-gikomero",
+      "name": "Gikomero (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Gikomero",
+      "fee": 3500,
+      "etaText": "Same day",
+      "cells": [
+        "Munini",
+        "Gasagara",
+        "Kibara",
+        "Murambi",
+        "Gicaca"
+      ]
+    },
+    {
+      "id": "gasabo-gisozi",
+      "name": "Gisozi (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Gisozi",
+      "fee": 2000,
+      "etaText": "Same day",
+      "cells": [
+        "Musezero",
+        "Ruhango"
+      ]
+    },
+    {
+      "id": "gasabo-jabana",
+      "name": "Jabana (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Jabana",
+      "fee": 2800,
+      "etaText": "Same day",
+      "cells": [
+        "Kabuye",
+        "Ngiryi",
+        "Bweramvura",
+        "Akamatamu",
+        "Kidashya"
+      ]
+    },
+    {
+      "id": "gasabo-jali",
+      "name": "Jali (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Jali",
+      "fee": 3000,
+      "etaText": "Same day",
+      "cells": [
+        "Nyabuliba",
+        "Nyakabungo",
+        "Muko",
+        "Nyamitanga",
+        "Agateko",
+        "Buhiza",
+        "Nkusi"
+      ]
+    },
+    {
+      "id": "gasabo-kacyiru",
+      "name": "Kacyiru (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Kacyiru",
+      "fee": 1800,
+      "etaText": "Same day",
+      "cells": [
+        "Kamutwa",
+        "Kibaza",
+        "Kamatamu"
+      ]
+    },
+    {
+      "id": "gasabo-kimihurura",
+      "name": "Kimihurura (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Kimihurura",
+      "fee": 1500,
+      "etaText": "Same day",
+      "cells": [
+        "Rugando",
+        "Kimihurura",
+        "Kamukina"
+      ]
+    },
+    {
+      "id": "gasabo-kimironko",
+      "name": "Kimironko (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Kimironko",
+      "fee": 2000,
+      "etaText": "Same day",
+      "cells": [
+        "Kibagaba",
+        "Nyagatovu",
+        "Bibare"
+      ]
+    },
+    {
+      "id": "gasabo-kinyinya",
+      "name": "Kinyinya (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Kinyinya",
+      "fee": 2500,
+      "etaText": "Same day",
+      "cells": [
+        "Gacuriro",
+        "Gasharu",
+        "Kagugu",
+        "Murama"
+      ]
+    },
+    {
+      "id": "gasabo-ndera",
+      "name": "Ndera (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Ndera",
+      "fee": 2800,
+      "etaText": "Same day",
+      "cells": [
+        "Masoro",
+        "Kibenga",
+        "Cyaruzinge",
+        "Rudashya",
+        "Bwiza",
+        "Mukuyu"
+      ]
+    },
+    {
+      "id": "gasabo-nduba",
+      "name": "Nduba (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Nduba",
+      "fee": 3200,
+      "etaText": "Same day",
+      "cells": [
+        "Butare",
+        "Gasanze",
+        "Gasura",
+        "Gatunga",
+        "Muremure",
+        "Sha",
+        "Shango"
+      ]
+    },
+    {
+      "id": "gasabo-remera",
+      "name": "Remera (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Remera",
+      "fee": 2000,
+      "etaText": "Same day",
+      "cells": [
+        "Rukiri I",
+        "Rukiri II",
+        "Nyabisindu",
+        "Nyarutarama"
+      ]
+    },
+    {
+      "id": "gasabo-rusororo",
+      "name": "Rusororo (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Rusororo",
+      "fee": 3000,
+      "etaText": "Same day",
+      "cells": [
+        "Bisenga",
+        "Gasagara",
+        "Kabuga 1",
+        "Kabuga 2",
+        "Kinyana",
+        "Mbandazi",
+        "Nyagahinga",
+        "Ruhanga"
+      ]
+    },
+    {
+      "id": "gasabo-rutunga",
+      "name": "Rutunga (Gasabo)",
+      "district": "Gasabo",
+      "sector": "Rutunga",
+      "fee": 3500,
+      "etaText": "Same day",
+      "cells": [
+        "Gasabo",
+        "Ndatemwa",
+        "Kibenga",
+        "Kabaliza",
+        "Kacyatwa",
+        "Kagabiro"
+      ]
+    },
+    {
+      "id": "kicukiro-gahanga",
+      "name": "Gahanga (Kicukiro)",
+      "district": "Kicukiro",
+      "sector": "Gahanga",
+      "fee": 3000,
+      "etaText": "Same day",
+      "cells": [
+        "Rwabutenge",
+        "Murinja",
+        "Kagasa",
+        "Nunga",
+        "Gahanga",
+        "Karembure"
+      ]
+    },
+    {
+      "id": "kicukiro-gatenga",
+      "name": "Gatenga (Kicukiro)",
+      "district": "Kicukiro",
+      "sector": "Gatenga",
+      "fee": 2200,
+      "etaText": "Same day",
+      "cells": [
+        "Gatenga",
+        "Nyanza",
+        "Karambo",
+        "Nyarurama"
+      ]
+    },
+    {
+      "id": "kicukiro-gikondo",
+      "name": "Gikondo (Kicukiro)",
+      "district": "Kicukiro",
+      "sector": "Gikondo",
+      "fee": 2000,
+      "etaText": "Same day",
+      "cells": [
+        "Kanserege",
+        "Kinunga",
+        "Kagunga"
+      ]
+    },
+    {
+      "id": "kicukiro-kagarama",
+      "name": "Kagarama (Kicukiro)",
+      "district": "Kicukiro",
+      "sector": "Kagarama",
+      "fee": 2500,
+      "etaText": "Same day",
+      "cells": [
+        "Rukatsa",
+        "Muyange",
+        "Kanserege"
+      ]
+    },
+    {
+      "id": "kicukiro-kanombe",
+      "name": "Kanombe (Kicukiro)",
+      "district": "Kicukiro",
+      "sector": "Kanombe",
+      "fee": 2500,
+      "etaText": "Same day",
+      "cells": [
+        "Busanza",
+        "Kabeza",
+        "Rubirizi",
+        "Karama"
+      ]
+    },
+    {
+      "id": "kicukiro-kicukiro",
+      "name": "Kicukiro (Kicukiro)",
+      "district": "Kicukiro",
+      "sector": "Kicukiro",
+      "fee": 2000,
+      "etaText": "Same day",
+      "cells": [
+        "Kicukiro",
+        "Ngoma",
+        "Gasharu",
+        "Kagina"
+      ]
+    },
+    {
+      "id": "kicukiro-kigarama",
+      "name": "Kigarama (Kicukiro)",
+      "district": "Kicukiro",
+      "sector": "Kigarama",
+      "fee": 2500,
+      "etaText": "Same day",
+      "cells": [
+        "Rwampara",
+        "Kigarama",
+        "Nyarurama",
+        "Karugira",
+        "Bwerankori"
+      ]
+    },
+    {
+      "id": "kicukiro-masaka",
+      "name": "Masaka (Kicukiro)",
+      "district": "Kicukiro",
+      "sector": "Masaka",
+      "fee": 3500,
+      "etaText": "Same day",
+      "cells": [
+        "Gako",
+        "Ayabaraya",
+        "Gitaraga",
+        "Rusheshe",
+        "Mbabe",
+        "Cyimo"
+      ]
+    },
+    {
+      "id": "kicukiro-niboye",
+      "name": "Niboye (Kicukiro)",
+      "district": "Kicukiro",
+      "sector": "Niboye",
+      "fee": 2200,
+      "etaText": "Same day",
+      "cells": [
+        "Gatare",
+        "Niboye",
+        "Nyakabanda"
+      ]
+    },
+    {
+      "id": "kicukiro-nyarugunga",
+      "name": "Nyarugunga (Kicukiro)",
+      "district": "Kicukiro",
+      "sector": "Nyarugunga",
+      "fee": 3000,
+      "etaText": "Same day",
+      "cells": [
+        "Kamashashi",
+        "Rwimbogo",
+        "Nonko"
+      ]
+    }
   ]
 }

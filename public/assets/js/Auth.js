@@ -330,7 +330,7 @@ WB.onReady(async () => {
 
     const tabSms = qs('#tab-sms');
     const tabEmail = qs('#tab-email');
-    function selectChannel(/** @param {'sms'|'email'} which*/) {
+    function selectChannel(/** @param {'sms'|'email'} which*/ which) {
       channel = which;
       tabSms.setAttribute('aria-selected', String(which === 'sms'));
       tabEmail.setAttribute('aria-selected', String(which === 'email'));

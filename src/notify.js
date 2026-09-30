@@ -111,7 +111,7 @@ function whatsappLink(text, to = config.brand.whatsapp) {
   return `https://wa.me/${String(to).replace(/\D/g, '')}?text=${encodeURIComponent(text)}`;
 }
 
-const money = (/** @param {number|string} n */) => `RWF ${Number(n).toLocaleString('en-US')}`;
+const money = (/** @param {number|string} n */ n) => `RWF ${Number(n).toLocaleString('en-US')}`;
 
 /* ------------------------------------------------------------------ messages */
 /**
@@ -131,7 +131,7 @@ function resetLinkMessage(link, minutes) {
   return `Wheatburn: use this link within ${minutes} minutes to set a new password. ${link}\nIf you did not ask for this, ignore this message.`;
 }
 
-function orderConfirmationMessage(/** @param {NotifyOrder} order */) {
+function orderConfirmationMessage(/** @param {NotifyOrder} order */ order) {
   const lines = [
     `Wheatburn: order ${order.number} confirmed.`,
     `${order.itemCount} item${order.itemCount === 1 ? '' : 's'} — ${money(order.total)}`,
@@ -171,7 +171,7 @@ async function sendOtp(phone, code, purpose) {
   return sendSms(phone, otpMessage(code, purpose, minutes), { purpose });
 }
 
-async function sendOrderConfirmation(/** @param {NotifyOrder} order */) {
+async function sendOrderConfirmation(/** @param {NotifyOrder} order */ order) {
   const message = orderConfirmationMessage(order);
   const sms = await sendSms(order.customer.phone, message, { order: order.number });
   if (order.customer.whatsappOptIn) {

@@ -9,7 +9,8 @@ window.WB = (function () {
   /* ------------------------------------------------------------------ fetch */
 
   const cache = { config: null, products: null, session: undefined };
-
+  const PHONE_HINT = 'Use a valid Rwandan number, e.g. 078 123 4567.';
+  const plain = (value) => (value === undefined || value === null ? '' : String(value));
   async function request(/** @type {string} */method, /** @type {string} */path, /** @type {any} */body) {
     const options = {
       method,
@@ -96,9 +97,9 @@ window.WB = (function () {
     if (props) {
       for (const [key, value] of Object.entries(props)) {
         if (value === null || value === undefined || value === false) continue;
-        if (key === 'class') node.className = tostring(value);
-        else if (key === 'text') node.textContent = tostring(value);
-        else if (key === 'html') node.innerHTML = tostring(value??'');
+        if (key === 'class') node.className = plain(value);
+        else if (key === 'text') node.textContent = plain(value);
+        else if (key === 'html') node.innerHTML = plain(value??'');
         else if (key === 'dataset') Object.assign(node.dataset, value);
         else if (key === 'on') for (const [evt, fn] of Object.entries(value)) node.addEventListener(evt, fn);
         else if (value === true) node.setAttribute(key, '');
@@ -288,7 +289,7 @@ window.WB = (function () {
     post: api.post,
     patch: api.patch,
     el,
-    esc,
+    esc: tostring,
     money,
     rwf,
     qs,

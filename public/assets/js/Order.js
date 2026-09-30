@@ -135,6 +135,70 @@ WB.onReady(async () => {
   }
 
   /* ----------------------------------------------------------- zone choices */
+  function buildSectorPicker() {
+    const wrap = document.createElement('div');
+    wrap.className = 'field mt-2';
+    const groups = {};
+    for (const z of state.zones) {
+      const m = /\((.+)\)$/.exec(z.name || '');
+      const district = z.district || (m ? m[1] : 'Kigali');
+      (groups[district] = groups[district] || []).push(z);
+    }
+    const chosen = state.zones.find((z) => z.id === state.zoneId) || null;
+
+    const sectorLabel = document.createElement('label');
+    sectorLabel.htmlFor = 'f-sector';
+    sectorLabel.textContent = 'Or deliver to (choose your sector)';
+    const sector = document.createElement('select');
+    sector.className = 'input';
+    sector.id = 'f-sector';
+    const blank = document.createElement('option');
+    blank.value = '';
+    blank.textContent = 'Choose your sector';
+    sector.appendChild(blank);
+    for (const district of Object.keys(groups)) {
+      const group = document.createElement('optgroup');
+      group.label = district;
+      for (const z of groups[district]) {
+        const o = document.createElement('option');
+        o.value = z.id;
+        o.textContent = (z.sector || z.name) + ' - ' + z.feeLabel;
+        group.appendChild(o);
+      }
+      sector.appendChild(group);
+    }
+    sector.value = chosen ? chosen.id : '';
+    sector.addEventListener('change', () => {
+      state.zoneId = sector.value || null;
+      state.cell = '';
+      renderZones();
+      refreshQuote();
+    });
+
+    const cellLabel = document.createElement('label');
+    cellLabel.htmlFor = 'f-cell';
+    cellLabel.textContent = 'Cell';
+    const cell = document.createElement('select');
+    cell.className = 'input';
+    cell.id = 'f-cell';
+    const cellBlank = document.createElement('option');
+    cellBlank.value = '';
+    cellBlank.textContent = 'Choose your cell';
+    cell.appendChild(cellBlank);
+    for (const c of (chosen && chosen.cells) || []) {
+      const o = document.createElement('option');
+      o.value = c;
+      o.textContent = c;
+      cell.appendChild(o);
+    }
+    cell.value = state.cell || '';
+    cell.disabled = !chosen;
+    cell.addEventListener('change', () => { state.cell = cell.value; });
+
+    wrap.append(sectorLabel, sector, cellLabel, cell);
+    return wrap;
+  }
+
   function renderZones() {
     const host = qs('#zone-choices');
     const choices = [];
@@ -170,7 +234,7 @@ WB.onReady(async () => {
       ]);
 
     choices.push(card(state.pickup, true));
-    for (const zone of state.zones) choices.push(card(zone, false));
+    choices.push(buildSectorPicker());
 
     host.replaceChildren(...choices);
 
@@ -376,9 +440,32 @@ WB.onReady(async () => {
       showCheckoutNote('Choose a delivery area, or collect at the counter.', 'error');
       ok = false;
     }
-    if (!isPickup && addressInput.value.trim().length < 6) {
-      WB.setFieldError(addressInput, 'Add an address or a clear landmark so the rider can find you.');
-      ok = false;
+    if (!isPickup) {
+      const chosenZone = state.zones.find((z) => z.id === state.zoneId);
+      const village = qs('#f-village').value.trim();
+      const street = qs('#f-street').value.trim();
+      const road = qs('#f-road-name').value.trim();
+      const house = qs('#f-house').value.trim();
+      if (chosenZone && chosenZone.cells && chosenZone.cells.length && !state.cell) {
+        showCheckoutNote('Choose your cell.', 'error');
+        ok = false;
+      }
+      if (!street) {
+        WB.setFieldError(qs('#f-street'), 'Enter your street or road number.');
+        ok = false;
+      }
+      if (!house) {
+        WB.setFieldError(qs('#f-house'), 'Enter your house or building number.');
+        ok = false;
+      }
+      addressInput.value = [
+        'House ' + house,
+        'Street/Road ' + street,
+        road,
+        village ? 'Village ' + village : '',
+        state.cell ? 'Cell ' + state.cell : '',
+        chosenZone ? chosenZone.name : ''
+      ].filter(Boolean).join(', ');
     }
     if (!ok) {
       WB.focusFirstInvalid(qs('#checkout-view'));

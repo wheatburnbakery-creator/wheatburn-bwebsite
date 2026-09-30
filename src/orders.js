@@ -227,7 +227,7 @@ async function createOrder({ items, customer, deliveryZoneId, payment, user, bas
 
 /* --------------------------------------------------------------- serialising */
 
-function serialize(/** @param {{id: string, status: string, lines: Array<object>, ...}} order */) {
+function serialize(/** @param {{id: string, status: string, lines: Array<object>, ...}} order */ order) {
   const status = statusMeta(order.status);
   const isPickup = Boolean(order.delivery?.isPickup);
   return {
@@ -240,7 +240,7 @@ function serialize(/** @param {{id: string, status: string, lines: Array<object>
     timeline: order.timeline,
     channel: order.channel,
     itemCount: order.itemCount,
-    lines: order.lines.map((/** @param {{sku: string, qty: number, price: number, ...}} line */) => ({
+    lines: order.lines.map((/** @param {{sku: string, qty: number, price: number, ...}} line */ line) => ({
       ...line,
       lineTotalLabel: catalog.formatRwf(line.lineTotal),
       unitPriceLabel: catalog.formatRwf(line.unitPrice)

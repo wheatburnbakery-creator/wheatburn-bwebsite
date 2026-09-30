@@ -270,12 +270,12 @@ WB.ui = (function () {
     const unknown = [];
 
     for (const line of lines) {
-      const product = products.find((/** * @param {*} p */) => p.id === line.productId);
+      const product = products.find((/** * @param {*} p */ p) => p.id === line.productId);
       if (!product) {
         unknown.push(line);
         continue;
       }
-      const variant = product.variants.find((/** @param {*} v */) => v.id === line.variantId) || product.variants[0];
+      const variant = product.variants.find((/** @param {*} v */ v) => v.id === line.variantId) || product.variants[0];
       subtotal += variant.price * line.qty;
 
       rows.push(
@@ -326,7 +326,7 @@ WB.ui = (function () {
             
             on: { click: () => WB.cart.replace(lines.filter((/**
  * @param {{productId: string|number, variantId?: string|number, qty: number}} l
- */) => !unknown.includes(l))) }
+ */ l) => !unknown.includes(l))) }
           })
         ])
       );
@@ -390,7 +390,7 @@ WB.ui = (function () {
   
   function productCard(/**
  * @param {{id: string|number, title: string, price: number}} product
- */) {
+ */ product) {
     const multi = product.variants.length > 1;
 
     const media = el('div', { class: 'product-media' }, [
@@ -415,7 +415,7 @@ WB.ui = (function () {
       const variant = multi
         ? product.variants.find((/**
  * @param {*} v
- */) => v.id === select.value) || product.variants[0]
+ */ v) => v.id === select.value) || product.variants[0]
         : product.variants[0];
       priceRow.replaceChildren(
         el('span', { class: 'price-tag', text: variant.priceLabel }),
@@ -473,7 +473,7 @@ WB.ui = (function () {
           const variant = multi
             ? product.variants.find((/**
  * @param {*} v
- */) => v.id === select.value) || product.variants[0]
+ */ v) => v.id === select.value) || product.variants[0]
             : product.variants[0];
           WB.cart.add({ productId: product.id, variantId: variant.id }, Number(qtyLabel.textContent));
           WB.toast(`${qtyLabel.textContent} × ${product.name} added to your basket.`, 'ok');

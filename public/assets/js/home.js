@@ -47,7 +47,7 @@ WB.onReady(async () => {
         el('td', { class: 'num', text: fee })
       ]);
 
-    const tableRows = info.zones.map((/** @param {{id: string|number, name: string, feeLabel: string, etaText: string}} zone */) => row(zone.name, zone.etaText, zone.feeLabel, zone.note));
+    const tableRows = info.zones.map((/** @param {{id: string|number, name: string, feeLabel: string, etaText: string}} zone */ zone) => row(zone.name, zone.etaText, zone.feeLabel, zone.note));
     tableRows.push(
       row(
         info.pickup.name,
@@ -77,7 +77,7 @@ WB.onReady(async () => {
   try {
     const info = await WB.api.get('/payments');
     WB.qs('#payment-grid').replaceChildren(
-      ...info.methods.map((/** @param {{id: string|number, label: string, detail?: string}} method */) =>
+      ...info.methods.map((/** @param {{id: string|number, label: string, detail?: string}} method */ method) =>
         el('div', { class: 'card' }, [
           el('h3', { text: method.short }),
           el('p', { class: 'mb-0', text: method.detail }),
