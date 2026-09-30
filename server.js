@@ -13,6 +13,7 @@ const config = require('./src/config');
 const store = require('./src/store');
 const httpUtil = require('./src/http');
 const routes = require('./src/routes');
+const botfilter = require('./src/botfilter');
 
 const NOT_FOUND_PAGE = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
@@ -38,6 +39,7 @@ const server = http.createServer(async (
 
   try {
     httpUtil.applySecurityHeaders(res);
+    if (botfilter.handle(req, res)) return;
 
     if (url.pathname === '/api' || url.pathname.startsWith('/api/')) {
       await routes.handleApi(req, res, url);
