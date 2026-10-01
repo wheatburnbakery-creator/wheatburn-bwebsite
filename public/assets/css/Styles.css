@@ -668,3 +668,18 @@ td.num, th.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
   .stat-row { gap: 30px; }
   .footer-grid { grid-template-columns: 1fr; }
 }
+
+/* Three-bar menu toggle */
+.nav-toggle {
+  width: 44px; height: 40px; padding: 0;
+  font-size: 0;
+  color: var(--ink, #1f1813);
+  background-color: transparent;
+  background-image: linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor);
+  background-size: 18px 2px;
+  background-position: center 11px, center 19px, center 27px;
+  background-repeat: no-repeat;
+  background-origin: border-box;
+  border: 1px solid var(--line, rgba(31,24,19,.12));
+  border-radius: var(--radius-sm, 8px);
+}

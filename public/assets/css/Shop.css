@@ -846,3 +846,20 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 @media print {
   .site-header, .site-footer, .wa-float, .drawer, .btn { display: none !important; }
 }
+
+/* Three-bar menu toggle */
+@media (max-width: 760px) {
+  .nav-toggle {
+    width: 46px; height: 40px; padding: 0;
+    font: inherit; font-size: 0;
+    color: var(--ink, #1f1813);
+    background-color: #fff;
+    background-image: linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor);
+    background-size: 18px 2px;
+    background-position: center 11px, center 19px, center 27px;
+    background-repeat: no-repeat;
+    background-origin: border-box;
+    border: 1.5px solid var(--line, rgba(31,24,19,.12));
+    border-radius: var(--radius-pill, 999px);
+  }
+}
