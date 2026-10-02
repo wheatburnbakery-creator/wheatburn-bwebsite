@@ -89,3 +89,17 @@ module.exports = {
     senderId: process.env.SMS_SENDER_ID || 'WHEATBURN'
   }
 };
+
+module.exports.chat = {
+  apiBase: process.env.CHAT_API_BASE || 'https://api.openai.com/v1',
+  apiKey: process.env.CHAT_API_KEY || '',
+  model: process.env.CHAT_MODEL || '',
+  maxTokens: Number(process.env.CHAT_MAX_TOKENS || 300),
+  temperature: Number(process.env.CHAT_TEMPERATURE || 0.4),
+  timeoutMs: Number(process.env.CHAT_TIMEOUT_MS || 15000),
+  maxMessageChars: 500,
+  maxHistory: 10,
+  dailyMax: Number(process.env.CHAT_DAILY_MAX || 200),
+  perCallerMax: 10,
+  perCallerWindowMs: 10 * 60 * 1000
+};

@@ -28,6 +28,7 @@ const orders = require('./orders');
 const auth = require('./auth');
 const notify = require('./notify');
 const httpUtil = require('./http');
+const chat = require('./server-chat');
 const { HttpError, json } = httpUtil;
 
 function baseUrl(/** @type {Req} */req) {
@@ -447,6 +448,8 @@ const ROUTES = [
   ['GET', 'delivery', deliveryInfo],
   ['GET', 'payments', paymentInfo],
   ['POST', 'cart/quote', quoteCart],
+  ['GET', 'chat/status', () => chat.status()],
+  ['POST', 'chat', (req, res, url, params, input) => chat.ask({ conversation: input.conversation, ip: String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim() })],
 
   ['POST', 'auth/register', register],
   ['POST', 'auth/login', loginPassword],
