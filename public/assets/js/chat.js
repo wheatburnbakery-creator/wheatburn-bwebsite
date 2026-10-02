@@ -18,8 +18,7 @@
     '.wbc-link{flex:1}',
     '.wbc-link.alt{background:#1f1813}'
   ].join('');
-  var st = document.createElement('style');
-  st.textContent = css;
+  var st = document.createElement('link'); st.rel = 'stylesheet'; st.href = '/assets/css/chat.css';
   document.head.appendChild(st);
 
   function el(tag, cls, text) {
